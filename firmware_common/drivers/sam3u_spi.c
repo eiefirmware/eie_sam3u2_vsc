@@ -179,7 +179,7 @@ Promises:
 void SpiRelease(SpiPeripheralType* psSpiPeripheral_)
 {
   /* Check to see if the peripheral is already released */
-  if( !(psSpiPeripheral_->u32PrivateFlags) & _SPI_PERIPHERAL_ASSIGNED )
+  if( !(psSpiPeripheral_->u32PrivateFlags & _SPI_PERIPHERAL_ASSIGNED) )
   {
     return;
   }
@@ -266,7 +266,7 @@ u32 SpiWriteData(SpiPeripheralType* psSpiPeripheral_, u32 u32Size_, u8* pu8Data_
   /* Check for a valid size */
   if(u32Size_ == 0)
   {
-    return NULL;
+    return 0;
   }
 
   /* Attempt to queue message and get a response token */

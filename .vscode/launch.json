@@ -1,0 +1,49 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "cwd": "${workspaceFolder}",
+            "executable": "./build/firmware-ascii",
+            "name": "firmware",
+            "request": "launch",
+            "type": "cortex-debug",
+            "device": "ATSAM3U2C",
+            "runToEntryPoint": "main",
+            // "breakAfterReset": true,
+            "showDevDebugOutput": "none",
+            "servertype": "jlink",
+            "svdPath": "${workspaceFolder}/firmware_common/bsp/ATSAM3U2C.svd",
+            "preLaunchTask": "Build firmware"
+        },
+        {
+            "name": "waf",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/waf",
+            "args": [
+                "${input:waf-command}",
+            ],
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+        },
+    ],
+    "inputs": [
+        {
+            "id": "waf-command",
+            "type": "pickString",
+            "description": "Which waf subcommand to run",
+            "default": "build",
+            "options": [
+                "distclean",
+                "configure",
+                "clean",
+                "build",
+                "clean build",
+            ]
+        }
+    ]
+}
