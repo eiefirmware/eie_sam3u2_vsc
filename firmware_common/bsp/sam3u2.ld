@@ -33,8 +33,8 @@ SECTIONS
 
     .bss (NOLOAD) : {
         _bss_start = ABSOLUTE(.);
-        *(.bss)
-        *( COMMON)
+        *(.bss*)
+        *( COMMON*)
         _bss_end = ABSOLUTE(.);
     } >RAM0
 
