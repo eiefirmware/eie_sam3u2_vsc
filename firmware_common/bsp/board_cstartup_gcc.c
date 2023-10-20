@@ -76,5 +76,5 @@ void c_startup(void) {
   // newlib-nano that pulls in a bunch of stdio code we don't really want.
 
   // Main shouldn't return. But if it does, lets just reset.
-  _start(); // TODO: NVIC_Reset();`
+  NVIC_SystemReset();
 }
