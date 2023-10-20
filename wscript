@@ -17,6 +17,7 @@
 # First import a few things we will need from python's stdlib and Waf's core library.
 import os
 import pathlib
+import subprocess
 
 import waflib.Configure as ConfMod
 from waflib.Node import Node
@@ -111,9 +112,14 @@ def configure(ctx):
     # it to provide accurate intellisense/go-to-definition operations.
     ctx.load("clang_compilation_database")
 
+    # Segger doesn't like to be consistent, need to use a different name based on platform.
+    jlink_name = "JLinkExe"
+    if Utils.is_win32:
+        jlink_name = "Jlink"
+
     # Find the Jlink tools. Not needed for much, just if you want to flash the firmware through waf
     # directly.
-    ctx.find_program("JLink", var="JLINK", path_list=get_jlink_srch_path())
+    ctx.find_program(jlink_name, var="JLINK", path_list=get_jlink_srch_path())
 
 
 # The "build" command is the default one run by waf if you don't specify anthing.
@@ -261,54 +267,71 @@ def get_jlink_srch_path():
     """
     Get search path to use for JLink programs/DLLs
     """
-    # On non-windows trust in the user/os to have a path set already.
-    if not Utils.is_win32:
+
+    paths = os.environ.get("PATH").split(os.pathsep)
+
+    if Utils.is_win32:
+        # For now just hard-code the default install paths. Don't include default search path due to
+        # conflicts with java's linker. User can still override with an explicit JLINK=... on the
+        # command line.
+        return [
+            "C:\\Program Files\\SEGGER\\JLink",
+            "C:\\Program Files (x86)\\SEGGER\\JLink",
+        ] + paths
+
+    elif Utils.unversioned_sys_platform() == "darwin":
+        return ["/Application/SEGGER/JLink"] + paths
+
+    elif Utils.unversioned_sys_platform() == "linux":
+        return ["/opt/SEGGER/JLink"] + paths
+
+    else:
+        return paths  # Trust in the PATH, Luke.
+
+
+def check_gcc_ver(pth: pathlib.Path):
+    """
+    Attempt to extract the version from a specific GCC.
+    If successfull returned as a tuple (maj, min, rel).
+    Otherwise returns None
+    """
+    exe_pth = pth / "arm-none-eabi-gcc.exe"
+    if not exe_pth.exists():
         return None
 
-    # For now just hard-code the default install paths. Don't include default search path due to
-    # conflicts with java's linker. User can still override with an explicit JLINK=... on the
-    # command line.
-    return [
-        "C:\\Program Files\\SEGGER\\JLink",
-        "C:\\Program Files (x86)\\SEGGER\\JLink",
-    ]
+    try:
+        ver = subprocess.run(
+            [exe_pth, "-dumpversion"], stdout=subprocess.PIPE
+        ).stdout.decode()
+    except:
+        return None
+
+    return tuple(int(v) for v in ver.split("."))
 
 
-def get_gcc_srch_path():
+def get_gcc_srch_path_win32():
     """
-    On windows this will look for typical GCC installations. Checked on 11.3 rel1 and 12.3 rel1.
+    Look for typical GCC installations. Checked on 11.3 rel1 and 12.3 rel1.
     If your gcc is older this may need to be modified (or just make sure it's on the path when you
     run configure).
     """
-    if not Utils.is_win32:
-        return None  # Non-windows platforms we just use whatever is on the path.
 
-    # Otherwise extend with anything we find in the registry or at the default install location.
+    # Extend with anything we find in the registry or at the default install location.
 
     # Import a few things JIT. Some of these will only work on windows.
     from collections import defaultdict
     import winreg
-    import subprocess
 
     REGISTRY_PATHS = [(winreg.HKEY_LOCAL_MACHINE, "SOFTWARE\\WOW6432Node\\ARM")]
     INSTALL_PATHS = ["C:\\Program Files (x86)\\Arm GNU Toolchain arm-none-eabi"]
 
-    def check(pth: pathlib.Path):
-        exe_pth = pth / "bin" / "arm-none-eabi-gcc.exe"
-        if not exe_pth.exists():
-            return
-
-        try:
-            ver = subprocess.run(
-                [exe_pth, "-dumpversion"], stdout=subprocess.PIPE
-            ).stdout.decode()
-        except:
-            return
-
-        [maj, min, bld] = [int(v) for v in ver.split(".")]
-        gcc_vers[(maj, min, bld)].add(str(pth / "bin"))
-
     gcc_vers = defaultdict(set)  # Map from version numbers to discovered paths.
+
+    def check(pth):
+        pth = pathlib.Path(pth) / "bin"
+        ver = check_gcc_ver(pth)
+        if ver:
+            gcc_vers[ver].add(str(pth))
 
     for root, subk in REGISTRY_PATHS:
         try:
@@ -345,6 +368,47 @@ def get_gcc_srch_path():
     for v in vers:
         pths += sorted(gcc_vers[v])
     return pths
+
+
+def get_gcc_srch_path_darwin():
+    from collections import defaultdict
+
+    gcc_vers = defaultdict(set)  # Map from version numbers to discovered paths.
+
+    # Known default install paths on Mac
+    INSTALL_PATHS = ["/Applications/ArmGNUToolchain/"]
+
+    for install_pth in INSTALL_PATHS:
+        install_pth = pathlib.Path(install_pth)
+        for pth in install_pth.iterdir():
+            # Not sure why but the mac paths have an extra path segment here
+            pth = pth / "arm-none-eabi" / "bin"
+            ver = check_gcc_ver(pth)
+            if ver:
+                gcc_vers[ver].add(str(pth))
+
+    if not gcc_vers:
+        # No installs found.
+        return None
+
+    vers = sorted(gcc_vers.keys())
+    vers.reverse()
+
+    # If different paths to the same version where found, using sorting to at least be
+    # consistent between runs.
+    pths = os.environ.get("PATH").split(os.pathsep)
+    for v in vers:
+        pths += sorted(gcc_vers[v])
+    return pths
+
+
+def get_gcc_srch_path():
+    if Utils.is_win32:
+        return get_gcc_srch_path_win32()
+    elif Utils.unversioned_sys_platform() == "darwin":
+        return get_gcc_srch_path_darwin()
+    else:
+        return None  # Tools should just be in the right spot.
 
 
 # This is an example of how to hook into waf's task-generation process.
