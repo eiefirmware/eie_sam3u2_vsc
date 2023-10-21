@@ -357,7 +357,7 @@ counter must be set at 1280. */
 
 
 #define MOR_KEY      (u32)(0x37 << 16)
-#define PMC_MOR_INIT (u32)0x0037F019
+#define PMC_MOR_INIT (u32)0x0037F009
 /*
     31 [0] Reserved
     30 [0] "
@@ -390,9 +390,9 @@ counter must be set at 1280. */
     08 [0] "
 
     07 [0] Reserved
-    06 [0] MOSCRCF 8MHz
+    06 [0] MOSCRCF 4MHz (Keep at 4 to match startup)
     05 [0] "
-    04 [1] "
+    04 [0] "
 
     03 [1] MOSCRCEN main on-chip RC osc is on for now
     02 [0] WAITMODE disabled
@@ -1582,7 +1582,7 @@ Tdiv_slclk = 2*(DIV+1)*Tslow_clock.
 */
 
 /* PIO Write Protect Mode Register PIO_WPMR
-Enables the Write Protect if WPKEY corresponds to 0x50494F (“PIO” in ASCII).
+Enables the Write Protect if WPKEY corresponds to 0x50494F ("PIO" in ASCII).
 Though this is defined in the user guide, there is no definition in the processor header file.
 We don't want to lock access to the GPIO registers anyway, so we won't use this for now.
 */
