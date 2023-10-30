@@ -10,9 +10,16 @@
             "args": [
                 "waf",
                 "build",
+                "--keep", // Keep going even if error, ensures all compilation failures are found.
             ],
             "isBuildCommand": true,
-            "problemMatcher": "$gcc",
+            "problemMatcher": {
+                "base": "$gcc",
+                "fileLocation": [
+                    "autoDetect",
+                    "${workspaceFolder}/build/",
+                ]
+            },
             "options": {
                 "cwd": "${workspaceFolder}",
             },
