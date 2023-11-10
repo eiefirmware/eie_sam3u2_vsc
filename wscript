@@ -289,13 +289,18 @@ def get_jlink_srch_path():
         return paths  # Trust in the PATH, Luke.
 
 
-def check_gcc_ver(pth: pathlib.Path):
+def check_gcc_ver(pth: pathlib.Path, ext=""):
     """
     Attempt to extract the version from a specific GCC.
     If successfull returned as a tuple (maj, min, rel).
     Otherwise returns None
     """
-    exe_pth = pth / "arm-none-eabi-gcc.exe"
+
+    name = "arm-none-eabi-gcc"
+    if ext:
+        name += f".{ext}"
+
+    exe_pth = pth / name
     if not exe_pth.exists():
         return None
 
@@ -329,7 +334,7 @@ def get_gcc_srch_path_win32():
 
     def check(pth):
         pth = pathlib.Path(pth) / "bin"
-        ver = check_gcc_ver(pth)
+        ver = check_gcc_ver(pth, ext="exe")
         if ver:
             gcc_vers[ver].add(str(pth))
 
