@@ -1686,7 +1686,7 @@ Promises:
 static void AntSyncSerialInitialize(void)
 {
   u32 u32EventTimer;
-  bool bErrorStatus = FALSE;
+  u8 u8ErrorCount = 0;
   
   /* Initialize buffer pointers */  
   Ant_pu8AntRxBufferNextChar    = Ant_au8AntRxBuffer;
@@ -1707,13 +1707,16 @@ static void AntSyncSerialInitialize(void)
   
   /* ANT should want to send message 0x6F now to indicate it has reset */
   u32EventTimer = G_u32SystemTime1ms;
-  while( !IS_SEN_ASSERTED() && !bErrorStatus )
+  while( !IS_SEN_ASSERTED() && (u8ErrorCount == 0) )
   {
-    bErrorStatus = IsTimeUp(&u32EventTimer, ANT_MSG_TIMEOUT_MS);
+    if(IsTimeUp(&u32EventTimer, ANT_MSG_TIMEOUT_MS))
+    {
+      u8ErrorCount++;
+    }
   }
 
   /* SEN is asserted if bErrorStatus is FALSE */
-  if (!bErrorStatus)
+  if (u8ErrorCount == 0)
   {
     /* Receive and process what should be the restart message */
     AntRxMessage();
@@ -1724,12 +1727,12 @@ static void AntSyncSerialInitialize(void)
     AntTxMessage(&G_au8ANTGetVersion[0]);   
     
     /* Process the message through AntExpectResponse */
-    AntExpectResponse(MESG_VERSION_ID, ANT_MSG_TIMEOUT_MS);
+    u8ErrorCount += AntExpectResponse(MESG_VERSION_ID, ANT_MSG_TIMEOUT_MS);
   }
   
-  if(bErrorStatus)
+  if(u8ErrorCount != 0)
   {
-    DebugPrintf("ANT failed boot\n\r");
+    DebugPrintf("\n\rANT failed boot\n\r");
   }
  
 } /* end AntSyncSerialInitialize */
