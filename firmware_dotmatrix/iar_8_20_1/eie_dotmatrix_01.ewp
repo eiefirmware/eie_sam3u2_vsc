@@ -339,11 +339,11 @@
                     <state>$PROJ_DIR$</state>
                     <state>$PROJ_DIR$\..\bsp</state>
                     <state>$PROJ_DIR$\..\drivers</state>
-                    <state>$PROJ_DIR$\..\application</state>
                     <state>$PROJ_DIR$\..\libraries\captouch</state>
                     <state>$PROJ_DIR$\..\..\firmware_common</state>
-                    <state>$PROJ_DIR$\..\..\firmware_common\application</state>
                     <state>$PROJ_DIR$\..\..\firmware_common\bsp</state>
+                    <state>$PROJ_DIR$\..\..\firmware_common\application</state>
+                    <state>$PROJ_DIR$\..\..\firmware_common\application\blade</state>
                     <state>$PROJ_DIR$\..\..\firmware_common\cmsis</state>
                     <state>$PROJ_DIR$\..\..\firmware_common\drivers</state>
                 </option>
@@ -610,10 +610,11 @@
                     <state>$PROJ_DIR$</state>
                     <state>$PROJ_DIR$\..\bsp</state>
                     <state>$PROJ_DIR$\..\drivers</state>
-                    <state>$PROJ_DIR$\..\application</state>
                     <state>$PROJ_DIR$\..\libraries\captouch</state>
                     <state>$PROJ_DIR$\..\..\firmware_common</state>
+                    <state>$PROJ_DIR$\..\..\firmware_common\bsp</state>
                     <state>$PROJ_DIR$\..\..\firmware_common\application</state>
+                    <state>$PROJ_DIR$\..\..\firmware_common\application\blade</state>
                     <state>$PROJ_DIR$\..\..\firmware_common\cmsis</state>
                     <state>$PROJ_DIR$\..\..\firmware_common\drivers</state>
                 </option>
@@ -2220,6 +2221,9 @@
         <group>
             <name>Include</name>
             <file>
+                <name>$PROJ_DIR$\..\..\firmware_common\application\blade\blade_api.h</name>
+            </file>
+            <file>
                 <name>$PROJ_DIR$\..\..\firmware_common\application\debug.h</name>
             </file>
             <file>
@@ -2240,6 +2244,9 @@
         </group>
         <group>
             <name>Source</name>
+            <file>
+                <name>$PROJ_DIR$\..\..\firmware_common\application\blade\blade_api.c</name>
+            </file>
             <file>
                 <name>$PROJ_DIR$\..\..\firmware_common\application\debug.c</name>
             </file>

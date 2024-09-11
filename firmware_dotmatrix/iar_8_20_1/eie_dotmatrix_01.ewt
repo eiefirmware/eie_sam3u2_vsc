@@ -2495,6 +2495,9 @@
         <group>
             <name>Include</name>
             <file>
+                <name>$PROJ_DIR$\..\..\firmware_common\application\blade\blade_api.h</name>
+            </file>
+            <file>
                 <name>$PROJ_DIR$\..\..\firmware_common\application\debug.h</name>
             </file>
             <file>
@@ -2515,6 +2518,9 @@
         </group>
         <group>
             <name>Source</name>
+            <file>
+                <name>$PROJ_DIR$\..\..\firmware_common\application\blade\blade_api.c</name>
+            </file>
             <file>
                 <name>$PROJ_DIR$\..\..\firmware_common\application\debug.c</name>
             </file>

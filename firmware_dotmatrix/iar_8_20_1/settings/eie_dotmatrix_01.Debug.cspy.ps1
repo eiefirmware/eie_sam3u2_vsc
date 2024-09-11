@@ -23,9 +23,9 @@ param([String]$debugfile = "");
 
 if ($debugfile -eq "")
 {
-& "C:\Program Files\IAR Systems\EWARM_8_10_1\common\bin\cspybat" -f "D:\EiE\EiE Git\razor_sam3u2\firmware_dotmatrix\iar_8_20_1\settings\eie_dotmatrix_01.Debug.general.xcl" --backend -f "D:\EiE\EiE Git\razor_sam3u2\firmware_dotmatrix\iar_8_20_1\settings\eie_dotmatrix_01.Debug.driver.xcl" 
+& "D:\IAR\EWARM_8_10_1\common\bin\cspybat" -f "E:\Github\razor_sam3u2\firmware_dotmatrix\iar_8_20_1\settings\eie_dotmatrix_01.Debug.general.xcl" --backend -f "E:\Github\razor_sam3u2\firmware_dotmatrix\iar_8_20_1\settings\eie_dotmatrix_01.Debug.driver.xcl" 
 }
 else
 {
-& "C:\Program Files\IAR Systems\EWARM_8_10_1\common\bin\cspybat" -f "D:\EiE\EiE Git\razor_sam3u2\firmware_dotmatrix\iar_8_20_1\settings\eie_dotmatrix_01.Debug.general.xcl" --debug_file=$debugfile --backend -f "D:\EiE\EiE Git\razor_sam3u2\firmware_dotmatrix\iar_8_20_1\settings\eie_dotmatrix_01.Debug.driver.xcl" 
+& "D:\IAR\EWARM_8_10_1\common\bin\cspybat" -f "E:\Github\razor_sam3u2\firmware_dotmatrix\iar_8_20_1\settings\eie_dotmatrix_01.Debug.general.xcl" --debug_file=$debugfile --backend -f "E:\Github\razor_sam3u2\firmware_dotmatrix\iar_8_20_1\settings\eie_dotmatrix_01.Debug.driver.xcl" 
 }

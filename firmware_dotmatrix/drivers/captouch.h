@@ -36,7 +36,7 @@ u8 CaptouchCurrentVSlidePosition(void);
 /*-------------------------------------------------------------------------------------------------------------------*/
 /*! @protectedsection */                                                                                            
 /*-------------------------------------------------------------------------------------------------------------------*/
-ErrorStatus CapTouchInitialize(void);
+ErrorStatusType CapTouchInitialize(void);
 void CapTouchRunActiveState(void);
 BOOL CapTouchUpdateSensorReadings(u16 u16CurrentTimeMs_);
 u8 u8CapTouchGetSliderValue(SliderNumberType eSliderNumber_);
@@ -45,7 +45,7 @@ u8 u8CapTouchGetSliderValue(SliderNumberType eSliderNumber_);
 /*-------------------------------------------------------------------------------------------------------------------*/
 /*! @privatesection */                                                                                            
 /*-------------------------------------------------------------------------------------------------------------------*/
-static ErrorStatus CapTouchVerify(void);
+static ErrorStatusType CapTouchVerify(void);
 static void CapTouchSetParameters(void);
 static void CapTouchGetDebugValues(u8 u8Channel_, u16* pu16Measure_, u16* pu16Reference_);
 

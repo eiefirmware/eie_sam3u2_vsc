@@ -118,7 +118,7 @@ Promises:
 void ClockSetup(void)
 {
   /* Set flash wait states to allow 48 MHz system clock (2 wait states required) */
-  AT91C_BASE_EFC0->EFC_FMR = AT91C_EFC_FWS_2WS;
+  AT91C_BASE_EFC0->EFC_FMR = AT91C_EFC_FWS_3WS;
 
   /* Activate the peripheral clocks needed for the system */
   AT91C_BASE_PMC->PMC_PCER = PMC_PCER_INIT;
