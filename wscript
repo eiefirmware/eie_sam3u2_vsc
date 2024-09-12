@@ -20,6 +20,7 @@ import pathlib
 import subprocess
 
 import waflib.Configure as ConfMod
+from waflib.Configure import conf
 from waflib.Node import Node
 from waflib.Task import Task
 from waflib.TaskGen import after, feature
@@ -45,6 +46,18 @@ ConfMod.autoconfig = True
 def options(ctx):
     # This tool provides some nice coloring to highlight errors and warnings in the terminal.
     ctx.load("color_gcc")
+
+    cfg_gr = ctx.get_option_group("Configuration options")
+
+    # Add an option to set the board type being built for.
+    cfg_gr.add_option(
+        "--board",
+        type="string",
+        help="Set the board type to build for. Valid options are 'ASCII' or 'DOT_MATRIX'.",
+        default="",
+        action='store',
+        dest='board',
+    )
 
     gr = ctx.get_option_group("Build and installation options")
 
@@ -121,6 +134,27 @@ def configure(ctx):
     # directly.
     ctx.find_program(jlink_name, var="JLINK", path_list=get_jlink_srch_path())
 
+    # Set the board type based on the command line option.
+    ctx.set_board()
+
+
+@conf
+def set_board(ctx):
+    """
+    Set the board type to build for.
+    """
+
+    board = ctx.options.board.lower()
+
+    # Save the board type in the environment variables so the --board
+    # option doesn't need to be specified every time.
+    if board == "ascii":
+        ctx.env.BOARD = "ASCII"
+    elif board == "dot_matrix":
+        ctx.env.BOARD = "DOT_MATRIX"
+    else:
+        ctx.fatal(f"Invalid board type '{board}' specified.")
+
 
 # The "build" command is the default one run by waf if you don't specify anthing.
 #
@@ -190,14 +224,37 @@ def build(ctx):
     work_folders = [
         "firmware_common/cmsis",
         "firmware_common/bsp",
-        "firmware_ascii/bsp",
         "firmware_common/drivers",
-        "firmware_ascii/drivers",
         "firmware_common/application",
+    ]
+
+    # Files specific to the ascii and dot matrix boards.
+    ascii_folders = [
+        "firmware_ascii/bsp",
+        "firmware_ascii/drivers",
+    ]
+    dot_matrix_folders = [
+        "firmware_dotmatrix/bsp/",
+        "firmware_dotmatrix/drivers",
+        "firmware_dotmatrix/libraries/captouch",
+        "firmware_dotmatrix/libraries/captouch/include",
     ]
 
     source = []
     includes = []
+    defines = []
+    target = ""
+
+    if ctx.env.BOARD == "ASCII":
+        work_folders += ascii_folders
+        defines.append("EIE_ASCII")
+        target = "firmware-ascii"
+    elif ctx.env.BOARD == "DOT_MATRIX":
+        work_folders += dot_matrix_folders
+        defines += ["EIE_DOTMATRIX", "EIE_NO_CAPTOUCH"]
+        target = "firmware-dot-matrix"
+    else:
+        ctx.fatal("No board type specified.")
 
     for folder in work_folders:
         source += ctx.srcnode.ant_glob(f"{folder}/*.s")  # assembly files
@@ -211,14 +268,14 @@ def build(ctx):
     # If you have a need to you can actually call progam() multiple times to build multiple
     # executable files.
     ctx.program(
-        target="firmware-ascii",
+        target=target,
         features="mapfile ihex",
         source=source,
         includes=includes,
         cflags=cflags,
         asflags=asflags,
         linkflags=linkflags,
-        defines=["EIE_ASCII"],
+        defines=defines,
         linker_script="firmware_common/bsp/sam3u2.ld",
     )
 
@@ -229,7 +286,7 @@ def build(ctx):
             input = "\n".join(
                 [
                     "erase",
-                    "loadfile build/firmware-ascii.hex",
+                    f"loadfile build/{target}.hex",
                     "reset",
                     "go",
                     "quit",

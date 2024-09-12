@@ -36,7 +36,7 @@ PROTECTED FUNCTIONS
 
 #include "configuration.h"
 #include "libqtouch.h"
-
+#ifndef EIE_NO_CAPTOUCH
 
 #define GET_SENSOR_STATE(SENSOR_NUMBER) (qt_measure_data.qt_touch_status.sensor_states[(SENSOR_NUMBER/8)] & (1 << (SENSOR_NUMBER % 8)))
 #define GET_ROTOR_SLIDER_POSITION(ROTOR_SLIDER_NUMBER) qt_measure_data.qt_touch_status.rotor_slider_values[ROTOR_SLIDER_NUMBER]
@@ -497,7 +497,7 @@ void CapTouchSM_Measure(void)
                
 } /* end CapTouchSM_Measure() */
             
-            
+#endif /* EIE_NO_CAPTOUCH */
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* End of File                                                                                                        */
 /*--------------------------------------------------------------------------------------------------------------------*/

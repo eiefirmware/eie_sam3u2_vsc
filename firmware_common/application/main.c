@@ -83,7 +83,7 @@ int main(void)
 #ifdef EIE_ASCII
 #endif /* EIE_ASCII */
 
-#ifdef EIE_DOTMATRIX
+#if defined(EIE_DOTMATRIX) && !defined(EIE_NO_CAPTOUCH)
   CapTouchInitialize();
 #endif /* EIE_DOTMATRIX */
  
@@ -122,7 +122,7 @@ int main(void)
 #ifdef EIE_ASCII
 #endif /* EIE_ASCII */
 
-#ifdef EIE_DOTMATRIX
+#if defined(EIE_DOTMATRIX) && !defined(EIE_NO_CAPTOUCH)
     CapTouchRunActiveState();
 #endif /* EIE_DOTMATRIX */
 

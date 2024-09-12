@@ -6,6 +6,7 @@ This file provides core and GPIO functions for the mpgl2-ehdw-01 board.
 ***********************************************************************************************************************/
 
 #include "configuration.h"
+#ifdef EIE_DOTMATRIX_R01
 
 /***********************************************************************************************************************
 Global variable definitions with scope across entire project.
@@ -373,7 +374,7 @@ void PWMAudioOff(u32 u32Channel_)
 
 } /* end PWMAudioOff() */
 
-
+#endif // EIE_DOTMATRIX_R01
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* End of File */
