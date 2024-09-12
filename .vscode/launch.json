@@ -7,7 +7,21 @@
         {
             "cwd": "${workspaceFolder}",
             "executable": "./build/firmware-ascii",
-            "name": "firmware",
+            "name": "Debug ASCII Board",
+            "request": "launch",
+            "type": "cortex-debug",
+            "device": "ATSAM3U2C",
+            "runToEntryPoint": "main",
+            // "breakAfterReset": true,
+            "showDevDebugOutput": "none",
+            "servertype": "jlink",
+            "svdPath": "${workspaceFolder}/firmware_common/bsp/ATSAM3U2C.svd",
+            "preLaunchTask": "Build firmware"
+        },
+        {
+            "cwd": "${workspaceFolder}",
+            "executable": "./build/firmware-dot-matrix",
+            "name": "Debug Dot Matrix Board",
             "request": "launch",
             "type": "cortex-debug",
             "device": "ATSAM3U2C",
