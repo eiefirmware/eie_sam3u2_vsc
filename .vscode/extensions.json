@@ -10,6 +10,9 @@
         "keroc.hex-fmt",
         "zixuanwang.linkerscriptm",
         "spadin.config-defaults",
+        "mhutchie.git-graph",
+        "eamodio.gitlens",
+        "ms-vscode.vscode-serial-monitor"
     ],
     // List of extensions recommended by VS Code that should not be recommended for users of this workspace.
     "unwantedRecommendations": []
