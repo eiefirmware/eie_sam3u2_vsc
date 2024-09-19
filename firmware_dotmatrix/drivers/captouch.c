@@ -27,9 +27,9 @@ PUBLIC FUNCTIONS
 - u8 CaptouchCurrentVSlidePosition(void)
 
 PROTECTED FUNCTIONS
-- ErrorStatus CapTouchInitialize(void)
+- ErrorStatusType CapTouchInitialize(void)
 - void CapTouchRunActiveState(void)
-- ErrorStatus CapTouchVerify(void)
+- ErrorStatusType CapTouchVerify(void)
 
 
 ***********************************************************************************************************************/
@@ -164,7 +164,7 @@ u8 CaptouchCurrentVSlidePosition(void)
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /*!--------------------------------------------------------------------------------------------------------------------
-@fn ErrorStatus CapTouchInitialize(void)
+@fn ErrorStatusType CapTouchInitialize(void)
 
 @brief Initializes the Captouch library. 
 
@@ -179,7 +179,7 @@ Promises:
 - Returns ERROR if the library doesn't match what's expected, else SUCCESS
 
 */
-ErrorStatus CapTouchInitialize(void)
+ErrorStatusType CapTouchInitialize(void)
 {
   DebugPrintf("Initializing CapTouch...\n\r");
   
@@ -315,7 +315,7 @@ u8 u8CapTouchGetSliderValue(SliderNumberType eSliderNumber_)
 
 
 /*!----------------------------------------------------------------------------------------------------------------------
-@fn static ErrorStatus CapTouchVerify(void)
+@fn static ErrorStatusType CapTouchVerify(void)
 
 @brief This function verifies the captouch library that's being used and makes sure
 the capabilities (and version) match what's expected and required.
@@ -327,7 +327,7 @@ Promises:
 - Returns ERROR if the library doesn't match what's expected, else SUCCESS
 
 */
-static ErrorStatus CapTouchVerify(void)
+static ErrorStatusType CapTouchVerify(void)
 {
   u32 u32Error = 0;
 

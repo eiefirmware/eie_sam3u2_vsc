@@ -30,10 +30,10 @@ PUBLIC FUNCTIONS
 - u32 TwiWriteData(u8 u8SlaveAddress_, u32 u32Size_, u8* pu8Data_, TwiStopType Send_)
 
 PROTECTED FUNCTIONS
-- void SspInitialize(void)
-- void SspRunActiveState(void)
-- void SspManualMode(void)
-- void SSP0_IRQHandler(void)
+- void TwiInitialize(void)
+- void TwiRunActiveState(void)
+- void TwiManualMode(void)
+- void TWI0_IrqHandler(void)
 
 
 **********************************************************************************************************************/
@@ -117,7 +117,7 @@ bool TwiReadData(u8 u8SlaveAddress_, u8* pu8RxBuffer_, u32 u32Size_)
   TWI_psMsgBufferNext->pu8RxBuffer = pu8RxBuffer_;
   
   /* Stop condition type and message token do not apply for Rx */
-  TWI_psMsgBufferNext->eStopType  = TWI_NA; 
+  TWI_psMsgBufferNext->eStopType = TWI_NA; 
   TWI_psMsgBufferNext->u32MessageTaskToken = 0;
       
   /* Update array indexers and size */
@@ -132,6 +132,7 @@ bool TwiReadData(u8 u8SlaveAddress_, u8* pu8RxBuffer_, u32 u32Size_)
   TWI_psMsgBufferNext->eDirection = TWI_EMPTY;
   TWI_psMsgBufferNext->u32Size = 0;
   TWI_psMsgBufferNext->u8Address = 0;
+  TWI_psMsgBufferNext->u8InternalAddress = 0;
   TWI_psMsgBufferNext->pu8RxBuffer = NULL;
   TWI_psMsgBufferNext->eStopType = TWI_NA; 
   TWI_psMsgBufferNext->u32MessageTaskToken = 0;
@@ -151,18 +152,98 @@ bool TwiReadData(u8 u8SlaveAddress_, u8* pu8RxBuffer_, u32 u32Size_)
 
 
 /*!--------------------------------------------------------------------------------------------------------------------
+@fn bool TwiWriteReadData(u8 u8SlaveAddress_, u8 u8InternalAddress_, u8* pu8RxBuffer_, u32 u32Size_)
+
+@brief Queues a TWI Read Message into TWI_asMessageBuffer but will first execute a TWI Write to set 
+the slave's internal address
+
+Read operations do not have an associated message in the Message task queue.
+
+Requires:
+- Master mode
+
+@param u8SlaveAddress_ holds the target's I²C address
+@param u8InternalAddress_ is the slave's internal address to start reading
+@param pu8RxBuffer_ has the space to save the data
+@param u32Size_ is the number of bytes to receive
+
+Promises:
+- Queues a multi byte command into the command array
+- Returns TRUE if the queue was successful
+
+*/
+bool TwiWriteReadData(u8 u8SlaveAddress_, u8 u8InternalAddress_, u8* pu8RxBuffer_, u32 u32Size_)
+{
+  if(TWI_u8MsgQueueCount == U8_TWI_MSG_BUFFER_SIZE)
+  {
+    /* TWI Message Task Queue Full or the Tx transmit isn't complete */
+    return FALSE;
+  }
+  
+  /* Critical section: TWI buffer management must be done with interrutps off since 
+  an ISR can also manage the buffer values and pointers */
+  __disable_irq();
+
+  /* Queue Relevant data for TWI register setup */
+  TWI_psMsgBufferNext->eDirection = TWI_READ;
+  TWI_psMsgBufferNext->u32Size = u32Size_;
+  TWI_psMsgBufferNext->u8Address = u8SlaveAddress_;
+  TWI_psMsgBufferNext->u8InternalAddress = u8InternalAddress_;
+  TWI_psMsgBufferNext->pu8RxBuffer = pu8RxBuffer_;
+  
+  /* Stop condition type and message token do not apply for Rx */
+  TWI_psMsgBufferNext->eStopType = TWI_NA; 
+  TWI_psMsgBufferNext->u32MessageTaskToken = 0;
+      
+  /* Update array indexers and size */
+  TWI_u8MsgQueueCount++;
+  TWI_psMsgBufferNext++;
+  if( TWI_psMsgBufferNext == &TWI_asMessageBuffer[U8_TWI_MSG_BUFFER_SIZE] )
+  {
+    TWI_psMsgBufferNext = &TWI_asMessageBuffer[0];
+  }
+  
+  /* Clear the new location to avoid confusion */
+  TWI_psMsgBufferNext->eDirection = TWI_EMPTY;
+  TWI_psMsgBufferNext->u32Size = 0;
+  TWI_psMsgBufferNext->u8Address = 0;
+  TWI_psMsgBufferNext->u8InternalAddress = 0;
+  TWI_psMsgBufferNext->pu8RxBuffer = NULL;
+  TWI_psMsgBufferNext->eStopType = TWI_NA; 
+  TWI_psMsgBufferNext->u32MessageTaskToken = 0;
+
+  /* End of critical section */
+  __enable_irq();
+    
+  /* If the system is initializing, manually cycle the TWI task through one iteration to send the message */
+  if(G_u32SystemFlags & _SYSTEM_INITIALIZING)
+  {
+    TwiManualMode();
+  }
+
+  return TRUE;
+  
+} /* end TwiWriteReadData() */
+
+
+/*!--------------------------------------------------------------------------------------------------------------------
 @fn u32 TwiWriteData(u8 u8SlaveAddress_, u32 u32Size_, u8* pu8Data_, TwiStopType eStop_)
 
 @brief Queues a data array for transfer on the TWI0 peripheral.  
+
 
 Requires:
 - if a transmission is in progress, the node in the buffer that is currently being sent will not 
   be destroyed during this function.
 
 @param u8SlaveAddress_ holds the target's I²C address
-@param u32Size_ is the number of bytes to send
-@param pu8Data_ points to the start of the data
+@param u32Size_ is the number of bytes to send NOT including the address byte
+@param pu8Data_ points to the start of the data to send
 @param eStop_ is the type of operation
+        - TWI_STOP for write-only where the bus is released after all bytes are written
+        - TWI_NO_STOP for cases where a read operation should immediately follow (the read operation's
+          start condition will be a re-start condition).  This is used for slave device where a command or 
+          register address must first be specified, then the data is read after.
 
 Promises:
 - adds the data message at TWI_Peripheral0.pTransmitBuffer buffer that will be sent by the TWI application
@@ -217,6 +298,7 @@ u32 TwiWriteData(u8 u8SlaveAddress_, u32 u32Size_, u8* pu8Data_, TwiStopType eSt
   TWI_psMsgBufferNext->u8Address   = 0;
   TWI_psMsgBufferNext->pu8RxBuffer = NULL;
   TWI_psMsgBufferNext->eStopType   = TWI_NA; 
+  TWI_psMsgBufferNext->u8InternalAddress = 0;
   TWI_psMsgBufferNext->u32MessageTaskToken = 0;
 
   /* End of critical section */
@@ -270,6 +352,7 @@ void TwiInitialize(void)
     TWI_asMessageBuffer[i].u32MessageTaskToken = 0;
     TWI_asMessageBuffer[i].u32Size = 0;
     TWI_asMessageBuffer[i].u8Address = 0;
+    TWI_asMessageBuffer[i].u8InternalAddress = 0;
   }
    
   /* Initialize the TWI peripheral structures */
@@ -459,9 +542,9 @@ static void TwiSM_Idle(void)
         UpdateMessageStatus(TWI_Peripheral0.pTransmitBuffer->u32Token, SENDING);
 
         /* Set up to transmit the message */
-        TWI_Peripheral0.u32PrivateFlags |= (_TWI_TRANSMITTING | _TWI_TRANS_NOT_COMP);
-        u32Byte = (TWI_psMsgBufferCurrent->u8Address) << TWI_MMR_ADDRESS_SHIFT;
-        TWI_Peripheral0.pBaseAddress->TWI_MMR |= u32Byte; 
+        TWI_Peripheral0.u32PrivateFlags |= _TWI_TRANSMITTING;
+        u32Byte = (u32)(TWI_psMsgBufferCurrent->u8Address) << TWI_MMR_ADDRESS_SHIFT;
+        TWI_Peripheral0.pBaseAddress->TWI_MMR = u32Byte; 
 
         /* Setup PDC and interrupts */
         TWI_Peripheral0.pBaseAddress->TWI_TPR = (u32)TWI_Peripheral0.pTransmitBuffer->pu8Message; 
@@ -490,8 +573,19 @@ static void TwiSM_Idle(void)
     {
       /* Set up for READ transaction */
       u32Byte = AT91C_TWI_MREAD | (TWI_psMsgBufferCurrent->u8Address << TWI_MMR_ADDRESS_SHIFT);
-      TWI_Peripheral0.pBaseAddress->TWI_MMR |= u32Byte; 
+      TWI_Peripheral0.pBaseAddress->TWI_MMR = u32Byte; 
       TWI_Peripheral0.u32PrivateFlags |= _TWI_RECEIVING;
+      
+      /* For WriteRead operation, also set the interal address otherwise make sure it is 0 */
+      if(TWI_psMsgBufferCurrent->u8InternalAddress != 0 )
+      {
+        TWI_Peripheral0.pBaseAddress->TWI_IADR = ((u32)(TWI_psMsgBufferCurrent->u8InternalAddress)) & 0x000000FF;
+        TWI_Peripheral0.pBaseAddress->TWI_MMR |= (1 << TWI_MMR_IADRZ_SHIFT);
+      }
+      else
+      {
+        TWI_Peripheral0.pBaseAddress->TWI_IADR = 0;
+      }
 
       /* Set up to receive the message based on number of bytes */
       if(TWI_psMsgBufferCurrent->u32Size == 1)
@@ -561,9 +655,7 @@ static void TwiSM_TxWaitComplete(void)
   /* Wait for TX to complete */
   if(TWI_Peripheral0.pBaseAddress->TWI_SR & AT91C_TWI_TXCOMP_MASTER)
   {
-    /* Clear flags and advance states */
-    TWI_Peripheral0.u32PrivateFlags &= ~_TWI_TRANS_NOT_COMP;
-    
+    /* Clear flags and advance states */  
     TWI_u32Timer = U8_NEXT_TRANSFER_DELAY_MS;
     TWI_pfnStateMachine = TwiSM_NextTransferDelay;
   }
@@ -593,7 +685,7 @@ static void TwiSM_PdcReceive(void)
 */
 static void TwiSM_ReceiveLastByte(void)
 {
-  if( TWI_Peripheral0.pBaseAddress->TWI_SR & AT91C_TWI_RXRDY )
+  if( (TWI_Peripheral0.pBaseAddress->TWI_SR) & AT91C_TWI_RXRDY )
   {
     /* Read the final byte */
     *(TWI_psMsgBufferCurrent->pu8RxBuffer + TWI_psMsgBufferCurrent->u32Size - 1) =  TWI_Peripheral0.pBaseAddress->TWI_RHR;
@@ -610,7 +702,7 @@ static void TwiSM_ReceiveLastByte(void)
 */
 static void TwiSM_ReceiveComplete(void)
 {
-  if(TWI_Peripheral0.pBaseAddress->TWI_SR & AT91C_TWI_TXCOMP_MASTER)
+  if( (TWI_Peripheral0.pBaseAddress->TWI_SR) & AT91C_TWI_TXCOMP_MASTER)
   {   
     /* Clear RX flag and advance states */
     TWI_Peripheral0.u32PrivateFlags &= ~_TWI_RECEIVING;
@@ -669,7 +761,7 @@ static void TwiSM_Error(void)
     /* Clear flags and clean up the Message task message */
     UpdateMessageStatus(TWI_Peripheral0.pTransmitBuffer->u32Token, FAILED);
     DeQueueMessage(&TWI_Peripheral0.pTransmitBuffer);
-    TWI_Peripheral0.u32PrivateFlags &= ~(_TWI_TRANSMITTING | _TWI_TRANS_NOT_COMP);
+    TWI_Peripheral0.u32PrivateFlags &= ~_TWI_TRANSMITTING;
   }
   
   /* RX TIMEOUT (receive only) */

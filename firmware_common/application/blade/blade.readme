@@ -1,0 +1,23 @@
+/*!*********************************************************************************************************************
+@file blade.readme
+@brief Instructions for adding Blade drivers
+
+This file explains the process of adding a Blade driver into the EiE
+firmware system.  All tested Blade firmware applications are available
+in the Source sub-folder.  They will be compiled with the whole project
+to ensure that there are no conflicts as the system evolves.  The Linker
+will not include any code that is not used by the system so resources
+will not be wasted for unused Blade applications.
+
+New Blade applications shall be based on blade_template.c and 
+blade_template.h files in the \application\blade folder.  Follow the
+instructions in these files to add a copy in for the new Blade.
+
+Blade tasks must request hardware resources during Initilization using
+the Blade API BladeRequestPin(). If these requests fail due to resource 
+conflicts, the Blade task should be set to "fail" state and reported 
+on the Debug output.  Blade tasks are NOT added to G_u32ApplicationFlags.
+
+To add a Blade driver, the Initialization and Main loop function
+calls shall be added to the system manually.  These function calls are
+accessed quickly at the top of the Blade template files.

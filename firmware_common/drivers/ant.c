@@ -1141,6 +1141,8 @@ static u8 AntProcessMessage(void)
           
           case MESG_CLOSE_CHANNEL_ID:
           {  
+            G_asAntChannelConfiguration[u8Channel].AntFlags &= ~_ANT_FLAGS_CHANNEL_CLOSE_PENDING;
+
             G_au8AntMessageClose[12] = au8MessageCopy[BUFFER_INDEX_CHANNEL_NUM] + 0x30;
             DebugPrintf(G_au8AntMessageClose);
 

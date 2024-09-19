@@ -40,7 +40,6 @@ typedef struct
 /* u32PrivateFlags definitions in TwiPeripheralType */
 #define _TWI_TRANSMITTING              (u32)0x00000001   /* Peripheral is Transmitting */
 #define _TWI_RECEIVING                 (u32)0x00000002   /* Peripheral is Receiving */
-#define _TWI_TRANS_NOT_COMP            (u32)0x00000004   /* Tx Transmit hasn't been completed */
  
 #define _TWI_ERROR_TX_MSG_SYNC         (u32)0x01000000  /*!< @brief Local Tx message token != queued token */
 /* end u32PrivateFlags */
@@ -56,6 +55,7 @@ typedef struct
   u32 u32Size;                         /*!< @brief RX ONLY: Size of the transfer */
   u8* pu8RxBuffer;                     /*!< @brief RX ONLY: Pointer to receive buffer in user application */
   u8 u8Address;                        /*!< @brief Slave address */
+  u8 u8InternalAddress;                /*!< @brief Slave internal address for writeread operations */
   TwiDirectionType eDirection;         /*!< @brief Tx/Rx Message Type */
   TwiStopType eStopType;               /*!< @brief TX ONLY: STOP condition behaviour */               
   u8 u8Pad;                       
@@ -82,30 +82,11 @@ Constants / Definitions
 
 
 /*! @cond DOXYGEN_EXCLUDE */
-#define TWI_MMR_ADDRESS_SHIFT          (u8)0x10            /* Used with << to shift address to correct position in MMR */
+#define TWI_MMR_ADDRESS_SHIFT          (u8)16              /* Used with << to shift address to correct position in MMR */
+#define TWI_MMR_IADRZ_SHIFT            (u8)8               /* Used with << to shift address to correct position in MMR */
 
 /*! @endcond */
 
-#if 0
-#define U32_TWI_INIT_MSG_TIMEOUT       (u32)1000           /* Time in ms for init message to send */
-#define U8_TWI_RX_FIFO_SIZE            (u8)1               /* Size of the peripheral's receive FIFO in bytes */
-
-
-#define _TWI_CR_START_BIT              (u32)(1 << 0)       /* Start Condition Control Bit */
-#define _TWI_CR_STOP_BIT               (u32)(1 << 1)       /* Stop Condition Control Bit */
-#define _TWI_CR_MSEN_BIT               (u32)(1 << 2)       /* Master Enable Bit */
-#define _TWI_CR_SWRST_BIT              (u32)(1 << 7)       /* Software Reset Bit */
-
-#define _TWI_MMR_MREAD_BIT             (u32)(1 << 12)      /* Read/Write Bit Or with MMR to set Read */
-#define _TWI_MMR_MREAD_MASK            (u32)0xFFFFEFFF     /* And with MMR to set Write */
-#define _TWI_MMR_DADR_MASK             (u32)0xFF80FFFF     /* And with MMR to Clear DADR (address) */
-
-#define _TWI_SR_TXCOMP                 (u32)(1<<0)         /* Transmission Complete used for both TX/RX */
-#define _TWI_SR_RXRDY                  (u32)(1<<1)         /* Receive Holding register ready Bit */
-#define _TWI_SR_TXRDY                  (u32)(1<<2)         /* Transmit Holding register ready Bit */
-#define _TWI_SR_OVRE                   (u32)(1<<6)         /* Rx Holding Buffer Overflow Bit */
-#define _TWI_SR_NACK                   (u32)(1<<8)         /* NACK Received */
-#endif
 
 
 /**********************************************************************************************************************
@@ -116,6 +97,7 @@ Constants / Definitions
 /*! @publicsection */                                                                                            
 /*-------------------------------------------------------------------------------------------------------------------*/
 bool TwiReadData(u8 u8SlaveAddress_, u8* pu8RxBuffer_, u32 u32Size_);
+bool TwiWriteReadData(u8 u8SlaveAddress_, u8 u8InternalAddress_, u8* pu8RxBuffer_, u32 u32Size_);
 u32 TwiWriteData(u8 u8SlaveAddress_, u32 u32Size_, u8* pu8Data_, TwiStopType eStop_);
 
 

@@ -142,11 +142,13 @@ Macros
 /**********************************************************************************************************************
 Constants / Definitions
 **********************************************************************************************************************/
-#define ANT_NUM_CHANNELS                  (u8)8                  /*!< @brief Maximum number of ANT channels in the system */
-#define ANT_RX_BUFFER_SIZE                (u16)256               /*!< @brief ANT incoming data buffer size */
+#define ANT_NUM_CHANNELS                  (u8)8                           /*!< @brief Maximum number of ANT channels in the system */
+#define ANT_RX_BUFFER_SIZE                (u16)256                        /*!< @brief ANT incoming data buffer size */
 
-#define ANT_CONFIGURE_TIMEOUT_MS          (u32)2000              /*!< @brief Maximum time to send all channel configuration messages */
-#define ANT_INFINITE_SEARCH_TIMEOUT       (u8)0xFF               /*!< @brief Value for Set Search Timeout for infinite timeout */
+#define U8_ANT_SEARCH_TIMEOUT             U8_ANT_SEARCH_TIMEOUT_10S       /*!< @brief Value for search timeout loaded in AntAssignChannel */
+#define U8_ANT_SEARCH_TIMEOUT_10S         (u8)4                           /*!< @brief Value for Set Search Timeout 10s (4 x 2.5s) */
+#define U8_ANT_SEARCH_TIMEOUT_30S         (u8)12                          /*!< @brief Value for Set Search Timeout 30s (12 x 2.5s) */
+#define U8_ANT_SEARCH_TIMEOUT_INF         (u8)0xFF                        /*!< @brief Value for Set Search Timeout for infinite timeout */
 
 /*!@cond DOXYGEN_EXCLUDE */
 #define ANT_RESET_WAIT_MS                 (u32)100
@@ -193,7 +195,7 @@ Constants / Definitions
 /* #### end of default channel configuration parameters ####*/
 
 #define ANT_ACTIVITY_TIME_COUNT   (u32)10000    /* Value used in a while loop that is waiting for an activity to be completed */
-#define ANT_SRDY_DELAY            (u32)200      /* A loop-kill delay to provide guaranteed minimum space for SRDY messages */
+#define ANT_SRDY_DELAY            (u32)300      /* A loop-kill delay to provide guaranteed minimum space for SRDY messages */
 #define ANT_SRDY_PERIOD           (u32)20       /* A loop-kill delay to stretch the SRDY pulse out */
 
 

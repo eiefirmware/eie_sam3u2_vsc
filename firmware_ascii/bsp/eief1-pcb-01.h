@@ -237,6 +237,40 @@ void PWMSetupAudio(void);
 #define PB_00_BUTTON1           (u32)0x00000001
 
 
+/* Blade pin standard definitions for BladeApi */
+#define BLADE_PIN_AN0           PB_03_BLADE_AN0 
+#define BLADE_PIN_AN1           PB_04_BLADE_AN1         
+#define BLADE_PIN_UPIMO         PA_11_BLADE_UPIMO       
+#define BLADE_PIN_UPOMI         PA_12_BLADE_UPOMI       
+#define BLADE_PIN_MISO          PA_13_BLADE_MISO        
+#define BLADE_PIN_MOSI          PA_14_BLADE_MOSI        
+#define BLADE_PIN_SCK           PA_15_BLADE_SCK         
+#define BLADE_PIN_CS            PA_16_BLADE_CS          
+#define BLADE_PIN_SDA           PA_09_I2C_SDA   
+#define BLADE_PIN_SCL           PA_10_I2C_SCL           
+
+#define BLADE_PIN_AN0_PORT      PORTB
+#define BLADE_PIN_AN1_PORT      PORTB
+#define BLADE_PIN_UPIMO_PORT    PORTA
+#define BLADE_PIN_UPOMI_PORT    PORTA
+#define BLADE_PIN_MISO_PORT     PORTA
+#define BLADE_PIN_MOSI_PORT     PORTA
+#define BLADE_PIN_SCK_PORT      PORTA
+#define BLADE_PIN_CS_PORT       PORTA
+#define BLADE_PIN_SDA_PORT      PORTA
+#define BLADE_PIN_SCL_PORT      PORTA
+
+#define BLADE_PIN_AN0_PERIPH    PERIPHERAL_B
+#define BLADE_PIN_AN1_PERIPH    PERIPHERAL_B
+#define BLADE_PIN_UPIMO_PERIPH  PERIPHERAL_A
+#define BLADE_PIN_UPOMI_PERIPH  PERIPHERAL_A
+#define BLADE_PIN_MISO_PERIPH   PERIPHERAL_A
+#define BLADE_PIN_MOSI_PERIPH   PERIPHERAL_A
+#define BLADE_PIN_SCK_PERIPH    PERIPHERAL_A
+#define BLADE_PIN_CS_PERIPH     PERIPHERAL_A
+#define BLADE_PIN_SDA_PERIPH    PERIPHERAL_A
+#define BLADE_PIN_SCL_PERIPH    PERIPHERAL_A
+
 /*! @cond DOXYGEN_EXCLUDE */
 
 /***********************************************************************************************************************

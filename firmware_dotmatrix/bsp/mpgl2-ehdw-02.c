@@ -117,7 +117,17 @@ Promises:
 */
 void ClockSetup(void)
 {
+<<<<<<< HEAD
 /* Enable the master clock on the PKC0 clock out pin (PA_27_CLOCK_OUT) */
+=======
+  /* Set flash wait states to allow 48 MHz system clock (2 wait states required) */
+  AT91C_BASE_EFC0->EFC_FMR = AT91C_EFC_FWS_3WS;
+
+  /* Activate the peripheral clocks needed for the system */
+  AT91C_BASE_PMC->PMC_PCER = PMC_PCER_INIT;
+
+  /* Enable the master clock on the PKC0 clock out pin (PA_27_CLOCK_OUT) */
+>>>>>>> master
   AT91C_BASE_PMC->PMC_PCKR[0] = AT91C_PMC_CSS_SYS_CLK | AT91C_PMC_PRES_CLK;
   AT91C_BASE_PMC->PMC_SCER = AT91C_PMC_PCK0;
   while ( !(AT91C_BASE_PMC->PMC_SR & AT91C_PMC_PCKRDY0) );

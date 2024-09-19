@@ -33,6 +33,7 @@ FIRMWARE_SUB_REV1: should be updated when a pull request is made to the MASTER b
 #define _APPLICATION_FLAGS_LCD          0x00000010        /*!< @brief G_u32ApplicationFlags LcdStateMachine is initialized */
 #define _APPLICATION_FLAGS_ADC          0x00000020        /*!< @brief G_u32ApplicationFlags Adc12StateMachine is initialized */
 #define _APPLICATION_FLAGS_ANT          0x00000040        /*!< @brief G_u32ApplicationFlags AntStateMachine is initialized */
+#define _APPLICATION_FLAGS_BLADE        0x00000080        /*!< @brief G_u32ApplicationFlags BladeStateMachine is initialized */
 //#define _APPLICATION_FLAGS_USBCDC       0x00000080        /*!< @brief G_u32ApplicationFlags USBCDC StateMachine */
 
 #ifdef EIE_ASCII

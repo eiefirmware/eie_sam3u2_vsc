@@ -69,6 +69,12 @@ typedef enum {FALSE = 0, TRUE = !FALSE} bool;  /*!< @brief EiE standard variable
 typedef enum {PORTA = 0, PORTB = 0x80} PortOffsetType;               
 
 /*! 
+@enum PinPeripheralType
+@brief Processor-specific peripheral selection address offsets.
+*/
+typedef enum {PERIPHERAL_A = 0, PERIPHERAL_B = 1} PinPeripheralType;               
+
+/*! 
 @enum GpioActiveType
 @brief Real names for active low vs. active high GPIO.
 */
@@ -86,10 +92,10 @@ typedef struct
 }PinConfigurationType;
 
 /*! 
-@struct ErrorStatus
+@enum ErrorStatus
 @brief Standarized, self-documenting error codes.
 */
-typedef enum {ERROR = 0, SUCCESS = !ERROR} ErrorStatus;
+typedef enum {SUCCESS = 0, ERROR = 1} ErrorStatusType;
 
 
 #endif /* __TYPEDEFS_H */

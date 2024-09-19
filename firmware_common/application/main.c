@@ -88,6 +88,7 @@ int main(void)
 #endif /* EIE_DOTMATRIX */
  
   /* Application initialization */
+  BladeApiInitialize();
   UserApp1Initialize();
   UserApp2Initialize();
   UserApp3Initialize();
@@ -127,6 +128,7 @@ int main(void)
 #endif /* EIE_DOTMATRIX */
 
     /* Applications */
+    BladeApiRunActiveState();
     UserApp1RunActiveState();
     UserApp2RunActiveState();
     UserApp3RunActiveState();

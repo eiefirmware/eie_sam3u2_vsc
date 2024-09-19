@@ -252,9 +252,9 @@ bool AntAssignChannel(AntAssignChannelInfoType* psAntSetupInfo_)
 
   G_au8AntSetChannelPower[4] = AntCalculateTxChecksum(G_au8AntSetChannelPower);
      
-  /* Setup the the channel search timeout (currently set at default for infinite search) */
+  /* Setup the the channel search timeout */
   G_au8AntSetSearchTimeout[2] = psAntSetupInfo_->AntChannel;
-  G_au8AntSetSearchTimeout[3] = ANT_INFINITE_SEARCH_TIMEOUT;
+  G_au8AntSetSearchTimeout[3] = U8_ANT_SEARCH_TIMEOUT;
 
   G_au8AntSetSearchTimeout[4] = AntCalculateTxChecksum(G_au8AntSetSearchTimeout);
   

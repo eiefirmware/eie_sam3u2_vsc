@@ -97,6 +97,7 @@ Includes
 #include "adc12.h"
 
 /* Common application header files */
+#include "blade_api.h"
 #include "debug.h"
 #include "music.h"
 #include "user_app1.h"
