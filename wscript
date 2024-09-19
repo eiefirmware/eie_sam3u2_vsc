@@ -240,8 +240,12 @@ def build(ctx):
         "firmware_dotmatrix/libraries/captouch/include",
     ]
 
-    source = []
-    includes = []
+    # Add blade files directly to the source to avoid compiling the template files
+    source = [
+        "firmware_common/application/blade/blade_api.c",
+        "firmware_common/application/blade/blade_imu_lsm6dsl.c"
+        ]
+    includes = ["firmware_common/application/blade"]
     defines = []
     target = ""
 
