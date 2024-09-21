@@ -8,7 +8,7 @@
 # $ ./waf-light configure build --tools=clang_compilation_database,color_gcc,gccdeps
 #
 # Also consider adding the --nostrip option if working on the wscript, to generate a waf pack
-# that includes comments (or set your WAFDIR variable, see the book). The version you checkin
+# that includes comments (or set your WAFDIR variable, see the book). The version you check in
 # should be stripped though to keep size down.
 
 # Onto the actual build script! It's a bit more involved than most waf examples you can find due
@@ -55,8 +55,8 @@ def options(ctx):
         type="string",
         help="Set the board type to build for. Valid options are 'ASCII' or 'DOT_MATRIX'.",
         default="",
-        action='store',
-        dest='board',
+        action="store",
+        dest="board",
     )
 
     gr = ctx.get_option_group("Build and installation options")
@@ -178,7 +178,7 @@ def build(ctx):
         "-mthumb",
         "-mno-thumb-interwork",
         "-masm-syntax-unified",
-        # This processor does not do anything special on arithmatic overflow.
+        # This processor does not do anything special on arithmetic overflow.
         # Make sure GCC knows to avoid optimizations that assume that.
         "-fno-strict-overflow",
         # We are using C99 as the target C standard.
@@ -243,8 +243,8 @@ def build(ctx):
     # Add blade files directly to the source to avoid compiling the template files
     source = [
         "firmware_common/application/blade/blade_api.c",
-        "firmware_common/application/blade/blade_imu_lsm6dsl.c"
-        ]
+        "firmware_common/application/blade/blade_imu_lsm6dsl.c",
+    ]
     includes = ["firmware_common/application/blade"]
     defines = []
     target = ""
@@ -267,9 +267,9 @@ def build(ctx):
 
     # The program() function creates a task gen with all the features needed to compile+link based
     # on what source files you specify (stepping through with a python debugger can be nice to
-    # undstand exactly how it does that :) )
+    # understand exactly how it does that :) )
     #
-    # If you have a need to you can actually call progam() multiple times to build multiple
+    # If you have a need to you can actually call program() multiple times to build multiple
     # executable files.
     ctx.program(
         target=target,
@@ -353,7 +353,7 @@ def get_jlink_srch_path():
 def check_gcc_ver(pth: pathlib.Path, ext=""):
     """
     Attempt to extract the version from a specific GCC.
-    If successfull returned as a tuple (maj, min, rel).
+    If successful returned as a tuple (maj, min, rel).
     Otherwise returns None
     """
 
@@ -428,7 +428,7 @@ def get_gcc_srch_path_win32():
     vers = sorted(gcc_vers.keys())
     vers.reverse()
 
-    # If different paths to the same version where found, using sorting to at least be
+    # If different paths to the same version were found, using sorting to at least be
     # consistent between runs.
     pths = os.environ.get("PATH").split(os.pathsep)
     for v in vers:
