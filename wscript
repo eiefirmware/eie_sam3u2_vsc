@@ -336,8 +336,7 @@ def get_jlink_srch_path():
         # conflicts with java's linker. User can still override with an explicit JLINK=... on the
         # command line.
         return [
-            "C:\\Program Files\\SEGGER\\JLink",
-            "C:\\Program Files (x86)\\SEGGER\\JLink",
+            "D:\\SEGGER\\JLink_V798i",
         ] + paths
 
     elif Utils.unversioned_sys_platform() == "darwin":
@@ -389,7 +388,7 @@ def get_gcc_srch_path_win32():
     import winreg
 
     REGISTRY_PATHS = [(winreg.HKEY_LOCAL_MACHINE, "SOFTWARE\\WOW6432Node\\ARM")]
-    INSTALL_PATHS = ["C:\\Program Files (x86)\\Arm GNU Toolchain arm-none-eabi"]
+    INSTALL_PATHS = ["D:\\Arm_GNU_Toolchain\\13_3_rel1\\arm-none-eabi"]
 
     gcc_vers = defaultdict(set)  # Map from version numbers to discovered paths.
 
