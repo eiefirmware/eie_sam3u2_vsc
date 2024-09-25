@@ -8,7 +8,7 @@
 # $ ./waf-light configure build --tools=clang_compilation_database,color_gcc,gccdeps
 #
 # Also consider adding the --nostrip option if working on the wscript, to generate a waf pack
-# that includes comments (or set your WAFDIR variable, see the book). The version you checkin
+# that includes comments (or set your WAFDIR variable, see the book). The version you check in
 # should be stripped though to keep size down.
 
 # Onto the actual build script! It's a bit more involved than most waf examples you can find due
@@ -17,6 +17,7 @@
 # First import a few things we will need from python's stdlib and Waf's core library.
 import os
 import pathlib
+import re
 import subprocess
 
 import waflib.Configure as ConfMod
@@ -55,8 +56,8 @@ def options(ctx):
         type="string",
         help="Set the board type to build for. Valid options are 'ASCII' or 'DOT_MATRIX'.",
         default="",
-        action='store',
-        dest='board',
+        action="store",
+        dest="board",
     )
 
     gr = ctx.get_option_group("Build and installation options")
@@ -127,12 +128,18 @@ def configure(ctx):
 
     # Segger doesn't like to be consistent, need to use a different name based on platform.
     jlink_name = "JLinkExe"
+    jlink_ext = ""
     if Utils.is_win32:
         jlink_name = "Jlink"
+        jlink_ext = ".exe"
 
     # Find the Jlink tools. Not needed for much, just if you want to flash the firmware through waf
     # directly.
-    ctx.find_program(jlink_name, var="JLINK", path_list=get_jlink_srch_path())
+    ctx.find_program(
+        jlink_name,
+        var="JLINK",
+        path_list=get_jlink_srch_path(f"{jlink_name}{jlink_ext}"),
+    )
 
     # Set the board type based on the command line option.
     ctx.set_board()
@@ -178,7 +185,7 @@ def build(ctx):
         "-mthumb",
         "-mno-thumb-interwork",
         "-masm-syntax-unified",
-        # This processor does not do anything special on arithmatic overflow.
+        # This processor does not do anything special on arithmetic overflow.
         # Make sure GCC knows to avoid optimizations that assume that.
         "-fno-strict-overflow",
         # We are using C99 as the target C standard.
@@ -243,8 +250,8 @@ def build(ctx):
     # Add blade files directly to the source to avoid compiling the template files
     source = [
         "firmware_common/application/blade/blade_api.c",
-        "firmware_common/application/blade/blade_imu_lsm6dsl.c"
-        ]
+        "firmware_common/application/blade/blade_imu_lsm6dsl.c",
+    ]
     includes = ["firmware_common/application/blade"]
     defines = []
     target = ""
@@ -267,9 +274,9 @@ def build(ctx):
 
     # The program() function creates a task gen with all the features needed to compile+link based
     # on what source files you specify (stepping through with a python debugger can be nice to
-    # undstand exactly how it does that :) )
+    # understand exactly how it does that :) )
     #
-    # If you have a need to you can actually call progam() multiple times to build multiple
+    # If you have a need to you can actually call program() multiple times to build multiple
     # executable files.
     ctx.program(
         target=target,
@@ -324,35 +331,84 @@ def build(ctx):
 # The rest of these functions are supporting items used during the configure/build commands.
 
 
-def get_jlink_srch_path():
+def check_jlink_ver(pth: pathlib.Path) -> None | tuple[str, str, str]:
+    """
+    Query the version number from a specific jlink commander executable.
+
+    Returns as tuple of (major, minor, patch). For example 7.98i becomes (7, 98, i).
+
+    If the version could not be determined then None is returned.
+    """
+    if not pth.exists():
+        return None
+
+    try:
+        res = subprocess.run(
+            [pth, "-AutoConnect", "0", "-NoGui", "1"],
+            text=True,
+            check=True,
+            capture_output=True,
+            input="exit\n",
+        )
+    except:
+        return None
+
+    ver_match = re.search(r"version V(\d+)\.(\d+)([a-z])", res.stdout)
+
+    if ver_match:
+        return (ver_match[1], ver_match[2], ver_match[3])
+
+    return None
+
+
+def get_jlink_srch_path(exe_name: str):
     """
     Get search path to use for JLink programs/DLLs
     """
 
     paths = os.environ.get("PATH").split(os.pathsep)
 
+    # JLink installer gives the option to update the "current instance", which
+    # is installed under the "Jlink" subfolder. Otherwise it installs a version
+    # specific folder.
+
+    install_roots = []
+    jlink_installs = []
+
     if Utils.is_win32:
-        # For now just hard-code the default install paths. Don't include default search path due to
-        # conflicts with java's linker. User can still override with an explicit JLINK=... on the
-        # command line.
-        return [
+
+        install_roots = [
+            "C:\\Program Files\\SEGGER\\",
+            "C:\\Program Files (x86)\\SEGGER\\",
             "D:\\SEGGER\\JLink_V798i",
-        ] + paths
+        ]
 
     elif Utils.unversioned_sys_platform() == "darwin":
-        return ["/Application/SEGGER/JLink"] + paths
+        install_roots = ["/Application/SEGGER/JLink"]
 
     elif Utils.unversioned_sys_platform() == "linux":
-        return ["/opt/SEGGER/JLink"] + paths
+        install_roots = ["/opt/SEGGER/JLink"]
 
-    else:
-        return paths  # Trust in the PATH, Luke.
+    for root_s in install_roots:
+        root = pathlib.Path(root_s)
+        if not root.exists():
+            continue
+
+        for pth in root.iterdir():
+            ver = check_jlink_ver(pth / exe_name)
+            if ver:
+                jlink_installs.append((ver, str(pth)))
+
+    # Sorting tuples goes from left to right. So this will source by version and then by path
+    # name.
+    jlink_paths = [pth for (_, pth) in sorted(jlink_installs, reverse=True)]
+    return jlink_paths + paths
 
 
 def check_gcc_ver(pth: pathlib.Path, ext=""):
     """
     Attempt to extract the version from a specific GCC.
-    If successfull returned as a tuple (maj, min, rel).
+    If successful returned as a tuple (maj, min, rel).
     Otherwise returns None
     """
 
@@ -427,7 +483,7 @@ def get_gcc_srch_path_win32():
     vers = sorted(gcc_vers.keys())
     vers.reverse()
 
-    # If different paths to the same version where found, using sorting to at least be
+    # If different paths to the same version were found, using sorting to at least be
     # consistent between runs.
     pths = os.environ.get("PATH").split(os.pathsep)
     for v in vers:
