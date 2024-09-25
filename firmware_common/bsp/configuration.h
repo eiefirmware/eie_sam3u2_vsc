@@ -11,7 +11,7 @@ Bookmarks:
 ##### UART peripheral board-specific parameters
 $$$$$ SPI peripheral board-specific parameters
 %%%%% SSP peripheral board-specific parameters
-^^^^^ I²C peripheral board-specific parameters
+^^^^^ Iï¿½C peripheral board-specific parameters
 
 
 ***********************************************************************************************************************/
@@ -50,7 +50,13 @@ Includes
 #include "AT91SAM3U4.h"
 #include "exceptions.h"
 #include "interrupts.h"
+
+/* ignore some warnings specific to the CMSIS headers */
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wimplicit-int"
 #include "core_cm3.h"
+#pragma GCC diagnostic pop
+
 #include "main.h"
 #include "typedefs.h"
 #include "utilities.h"
@@ -1202,12 +1208,12 @@ or 2MHz, so no issues.
 
 /*! @endcond */
 /***********************************************************************************************************************
-^^^^^ I²C (TWI) peripheral board-specific parameters
+^^^^^ Iï¿½C (TWI) peripheral board-specific parameters
 ***********************************************************************************************************************/
 /*! @cond DOXYGEN_EXCLUDE */
 
 /*----------------------------------------------------------------------------------------------------------------------
-I²C Master mode for EiE development board (TWI0)
+Iï¿½C Master mode for EiE development board (TWI0)
 ASCII: LCD and Blade
 Dot Matrix: Blade and R01 EIE_DOTMATRIX accelerometer
 */

@@ -124,22 +124,23 @@ Promises:
 */
 void ClockSetup(void)
 {
-  /* Set flash wait states to allow 48 MHz system clock (2 wait states required) */
-  AT91C_BASE_EFC0->EFC_FMR = AT91C_EFC_FWS_2WS;
-
-  /* Activate the peripheral clocks needed for the system */
-  AT91C_BASE_PMC->PMC_PCER = PMC_PCER_INIT;
-
   /* Enable the master clock on the PKC0 clock out pin (PA_27_CLOCK_OUT) */
   AT91C_BASE_PMC->PMC_PCKR[0] = AT91C_PMC_CSS_SYS_CLK | AT91C_PMC_PRES_CLK;
   AT91C_BASE_PMC->PMC_SCER = AT91C_PMC_PCK0;
+  while ( !(AT91C_BASE_PMC->PMC_SR & AT91C_PMC_PCKRDY0) );
 
   /* Turn on the main oscillator and wait for it to start up */
   AT91C_BASE_PMC->PMC_MOR = PMC_MOR_INIT;
   while ( !(AT91C_BASE_PMC->PMC_SR & AT91C_PMC_MOSCXTS) );
 
-  /* Assign main clock as crystal */
+  /* Assign main clock as crystal and wait for switch */
   AT91C_BASE_PMC->PMC_MOR |= (AT91C_CKGR_MOSCSEL | MOR_KEY);
+  while ( !(AT91C_BASE_PMC->PMC_SR & AT91C_PMC_MOSCSELS) );
+
+  /* Set flash wait states to allow 48 MHz system clock (2 wait states required) */
+  /* Note: There is an errata where the flash controller can't operate at sub-5 Mhz with
+     wait states programmed, so this must be done after the clock is bumped to 12 Mhz*/
+  AT91C_BASE_EFC0->EFC_FMR = AT91C_EFC_FWS_2WS;
   
   /* Initialize PLLA and wait for lock */
   AT91C_BASE_PMC->PMC_PLLAR = PMC_PLAAR_INIT;
@@ -154,6 +155,10 @@ void ClockSetup(void)
   /* Initialize UTMI for USB usage */
   AT91C_BASE_CKGR->CKGR_UCKR |= (AT91C_CKGR_UPLLCOUNT & (3 << 20)) | AT91C_CKGR_UPLLEN;
   while ( !(AT91C_BASE_PMC->PMC_SR & AT91C_PMC_LOCKU) ); 
+
+  /* Activate the peripheral clocks needed for the system, must be done
+     last to ensure all clock sources are valid before clocking periphs. */
+  AT91C_BASE_PMC->PMC_PCER = PMC_PCER_INIT;
   
 } /* end ClockSetup */
 

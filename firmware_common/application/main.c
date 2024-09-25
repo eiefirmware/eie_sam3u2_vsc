@@ -40,7 +40,7 @@ Variable names shall start with "Main_" and be declared as static.
 
 
 /*!---------------------------------------------------------------------------------------------------------------------
-@fn void main(void)
+@fn int main(void)
 @brief Main program where all tasks are initialized and executed.
 
 Requires:
@@ -50,7 +50,7 @@ Promises:
 - NONE
 
 */
-void main(void)
+int main(void)
 {
   G_u32SystemFlags |= _SYSTEM_INITIALIZING;
 
@@ -83,7 +83,7 @@ void main(void)
 #ifdef EIE_ASCII
 #endif /* EIE_ASCII */
 
-#ifdef EIE_DOTMATRIX
+#if defined(EIE_DOTMATRIX) && !defined(EIE_NO_CAPTOUCH)
   CapTouchInitialize();
 #endif /* EIE_DOTMATRIX */
  
@@ -123,7 +123,7 @@ void main(void)
 #ifdef EIE_ASCII
 #endif /* EIE_ASCII */
 
-#ifdef EIE_DOTMATRIX
+#if defined(EIE_DOTMATRIX) && !defined(EIE_NO_CAPTOUCH)
     CapTouchRunActiveState();
 #endif /* EIE_DOTMATRIX */
 

@@ -237,6 +237,39 @@ void PWMSetupAudio(void);
 #define PB_01_LED0_BLU          (u32)0x00000002
 #define PB_00_BUTTON1           (u32)0x00000001
 
+/* Blade pin standard definitions for BladeApi */
+#define BLADE_PIN_AN0           PB_03_BLADE_AN0 
+#define BLADE_PIN_AN1           PB_04_BLADE_AN1         
+#define BLADE_PIN_UPIMO         PA_11_BLADE_UPIMO       
+#define BLADE_PIN_UPOMI         PA_12_BLADE_UPOMI       
+#define BLADE_PIN_MISO          PA_13_BLADE_MISO        
+#define BLADE_PIN_MOSI          PA_14_BLADE_MOSI        
+#define BLADE_PIN_SCK           PA_15_BLADE_SCK         
+#define BLADE_PIN_CS            PA_16_BLADE_CS          
+#define BLADE_PIN_SDA           PA_09_I2C_SDA   
+#define BLADE_PIN_SCL           PA_10_I2C_SCL           
+
+#define BLADE_PIN_AN0_PORT      PORTB
+#define BLADE_PIN_AN1_PORT      PORTB
+#define BLADE_PIN_UPIMO_PORT    PORTA
+#define BLADE_PIN_UPOMI_PORT    PORTA
+#define BLADE_PIN_MISO_PORT     PORTA
+#define BLADE_PIN_MOSI_PORT     PORTA
+#define BLADE_PIN_SCK_PORT      PORTA
+#define BLADE_PIN_CS_PORT       PORTA
+#define BLADE_PIN_SDA_PORT      PORTA
+#define BLADE_PIN_SCL_PORT      PORTA
+
+#define BLADE_PIN_AN0_PERIPH    PERIPHERAL_B
+#define BLADE_PIN_AN1_PERIPH    PERIPHERAL_B
+#define BLADE_PIN_UPIMO_PERIPH  PERIPHERAL_A
+#define BLADE_PIN_UPOMI_PERIPH  PERIPHERAL_A
+#define BLADE_PIN_MISO_PERIPH   PERIPHERAL_A
+#define BLADE_PIN_MOSI_PERIPH   PERIPHERAL_A
+#define BLADE_PIN_SCK_PERIPH    PERIPHERAL_A
+#define BLADE_PIN_CS_PERIPH     PERIPHERAL_A
+#define BLADE_PIN_SDA_PERIPH    PERIPHERAL_A
+#define BLADE_PIN_SCL_PERIPH    PERIPHERAL_A
 
 /*! @cond DOXYGEN_EXCLUDE */
 
@@ -359,7 +392,7 @@ counter must be set at 1280. */
 
 
 #define MOR_KEY      (u32)(0x37 << 16)
-#define PMC_MOR_INIT (u32)0x0037F019
+#define PMC_MOR_INIT (u32)0x0037F009
 /*
     31 [0] Reserved
     30 [0] "
@@ -392,9 +425,9 @@ counter must be set at 1280. */
     08 [0] "
 
     07 [0] Reserved
-    06 [0] MOSCRCF 8MHz
+    06 [0] MOSCRCF 4MHz (Keep at 4 to match startup)
     05 [0] "
-    04 [1] "
+    04 [0] "
 
     03 [1] MOSCRCEN main on-chip RC osc is on for now
     02 [0] WAITMODE disabled
@@ -2125,7 +2158,7 @@ For now, don't worry about explictly disabling any write capability.
 */
 
 /* PIO Write Protect Mode Register PIO_WPMR
-Enables the Write Protect if WPKEY corresponds to 0x50494F (“PIO” in ASCII).
+Enables the Write Protect if WPKEY corresponds to 0x50494F ("PIO" in ASCII).
 Though this is defined in the user guide, there is no definition in the processor header file.
 We don't want to lock access to the GPIO registers anyway, so we won't use this for now.
 */

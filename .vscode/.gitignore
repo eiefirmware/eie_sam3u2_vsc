@@ -1,0 +1,3 @@
+# Ignore the settings file, but a default is provided which should seed this using the
+# config-defaults extension.
+settings.json

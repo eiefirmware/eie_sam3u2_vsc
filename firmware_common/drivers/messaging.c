@@ -239,9 +239,9 @@ Promises:
 */
 u32 QueueMessage(MessageType** ppsTargetTxBuffer_, u32 u32MessageSize_, u8* pu8MessageData_)
 {
-  MessageSlotType *psSlotParser;
-  MessageType *psNewMessage;
-  MessageType *psListParser;
+  MessageSlotType *psSlotParser = NULL;
+  MessageType *psNewMessage = NULL;
+  MessageType *psListParser = NULL;
   u8  u8SlotsRequired;
   u32 u32BytesRemaining = u32MessageSize_;
   u32 u32CurrentMessageSize = 0;

@@ -291,7 +291,7 @@ u32 UartWriteByte(UartPeripheralType* psUartPeripheral_, u8 u8Byte_)
   /* Attempt to queue message and get a response token */
   u32Token = QueueMessage(&psUartPeripheral_->psTransmitBuffer, 1, &u8Data);
   
-  if( u32Token != NULL )
+  if( u32Token != 0 )
   {
     /* If the system is initializing, we want to manually cycle the UART task through one iteration
     to send the message */
@@ -331,7 +331,7 @@ u32 UartWriteData(UartPeripheralType* psUartPeripheral_, u32 u32Size_, u8* pu8Da
   /* Check for a valid size */
   if(u32Size_ == 0)
   {
-    return NULL;
+    return 0;
   }
 
   /* Attempt to queue message and get a response token */

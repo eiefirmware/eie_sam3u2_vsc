@@ -352,7 +352,7 @@ Promises:
 void SspRelease(SspPeripheralType* psSspPeripheral_)
 {
   /* Check to see if the peripheral is already released */
-  if( !(psSspPeripheral_->u32PrivateFlags) & _SSP_PERIPHERAL_ASSIGNED )
+  if( !(psSspPeripheral_->u32PrivateFlags & _SSP_PERIPHERAL_ASSIGNED) )
   {
     return;
   }

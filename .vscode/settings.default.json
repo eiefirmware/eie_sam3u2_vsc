@@ -1,0 +1,14 @@
+{
+    "cortex-debug.variableUseNaturalFormat": false,
+    "C_Cpp.autoAddFileAssociations": false,
+    "cortex-debug.liveWatchRefreshRate": 600,
+    // These defaults are based on typical install paths, you may need to update them based on
+    // what version and where you installed things. (they also belong in your user config).
+    // TODO: Would it be okay to auto-set these from waf? Or in the launch config? That might be
+    // too much automatic magic.
+    "cortex-debug.armToolchainPath.windows": "C:\\Program Files (x86)\\Arm GNU Toolchain arm-none-eabi\\13.3 rel1\\bin",
+    "cortex-debug.armToolchainPath.osx": "/Application/ArmGNUToolchain/13.3.rel1/arm-none-eabi/bin",
+    "cortex-debug.JLinkGDBServerPath.windows": "C:\\Program Files\\SEGGER\\JLink\\JLinkGDBServerCL.exe",
+    "cortex-debug.JLinkGDBServerPath.osx": "/Application/SEGGER/JLink/JLinkGDBServerCLExe",
+    "cortex-debug.JLinkGDBServerPath.linux": "/opt/SEGGER/JLink/JLinkGDBServerCLExe",
+}

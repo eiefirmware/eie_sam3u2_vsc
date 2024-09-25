@@ -48,7 +48,7 @@
 typedef void( *IntFunc )( void );
 
 /// Weak attribute
-    #define WEAK __weak
+    #define WEAK __attribute__((weak))
 
 //------------------------------------------------------------------------------
 //         Global functions
@@ -58,78 +58,78 @@ typedef void( *IntFunc )( void );
 //         Exception Handlers
 //------------------------------------------------------------------------------
 
-extern WEAK void NMI_Handler( void );
-extern WEAK void HardFault_Handler( void );
-extern WEAK void MemManage_Handler( void );
-extern WEAK void BusFault_Handler( void );
-extern WEAK void UsageFault_Handler( void );
-extern WEAK void SVC_Handler( void );
-extern WEAK void DebugMon_Handler( void );
-extern WEAK void PendSV_Handler( void );
-extern WEAK void SysTick_Handler( void );
+extern void NMI_Handler( void );
+extern void HardFault_Handler( void );
+extern void MemManage_Handler( void );
+extern void BusFault_Handler( void );
+extern void UsageFault_Handler( void );
+extern void SVC_Handler( void );
+extern void DebugMon_Handler( void );
+extern void PendSV_Handler( void );
+extern void SysTick_Handler( void );
 void IrqHandlerNotUsed(void);
 
 
 // System Controller
 extern void SYS_IrqHandler(void);
 // SUPPLY CONTROLLER
-extern WEAK void SUPC_IrqHandler(void);
+extern void SUPC_IrqHandler(void);
 // RESET CONTROLLER
-extern WEAK void RSTC_IrqHandler(void);
+extern void RSTC_IrqHandler(void);
 // REAL TIME CLOCK
-extern WEAK void RTC_IrqHandler(void);
+extern void RTC_IrqHandler(void);
 // REAL TIME TIMER
-extern WEAK void RTT_IrqHandler(void);
+extern void RTT_IrqHandler(void);
 // WATCHDOG TIMER
-extern WEAK void WDT_IrqHandler(void);
+extern void WDT_IrqHandler(void);
 // PMC
-extern WEAK void PMC_IrqHandler(void);
+extern void PMC_IrqHandler(void);
 // EFC0
-extern WEAK void EFC0_IrqHandler(void);
+extern void EFC0_IrqHandler(void);
 // EFC1
-extern WEAK void EFC1_IrqHandler(void);
+extern void EFC1_IrqHandler(void);
 // DBGU
-extern WEAK void DBGU_IrqHandler(void);
+extern void DBGU_IrqHandler(void);
 // HSMC4
-extern WEAK void HSMC4_IrqHandler(void);
+extern void HSMC4_IrqHandler(void);
 // Parallel IO Controller A
-extern WEAK void PIOA_IrqHandler(void);
+extern void PIOA_IrqHandler(void);
 // Parallel IO Controller B
-extern WEAK void PIOB_IrqHandler(void);
+extern void PIOB_IrqHandler(void);
 // Parallel IO Controller C
-extern WEAK void PIOC_IrqHandler(void);
+extern void PIOC_IrqHandler(void);
 // USART 0
-extern WEAK void USART0_IrqHandler(void);
+extern void USART0_IrqHandler(void);
 // USART 1
-extern WEAK void USART1_IrqHandler(void);
+extern void USART1_IrqHandler(void);
 // USART 2
-extern WEAK void USART2_IrqHandler(void);
+extern void USART2_IrqHandler(void);
 // USART 3
-extern WEAK void USART3_IrqHandler(void);
+extern void USART3_IrqHandler(void);
 // Multimedia Card Interface
-extern WEAK void MCI0_IrqHandler(void);
+extern void MCI0_IrqHandler(void);
 // TWI 0
-extern WEAK void TWI0_IrqHandler(void);
+extern void TWI0_IrqHandler(void);
 // TWI 1
-extern WEAK void TWI1_IrqHandler(void);
+extern void TWI1_IrqHandler(void);
 // Serial Peripheral Interface 0
-extern WEAK void SPI0_IrqHandler(void);
+extern void SPI0_IrqHandler(void);
 // Serial Synchronous Controller 0
-extern WEAK void SSC0_IrqHandler(void);
+extern void SSC0_IrqHandler(void);
 // Timer Counter 0
-extern WEAK void TC0_IrqHandler(void);
+extern void TC0_IrqHandler(void);
 // Timer Counter 1
-extern WEAK void TC1_IrqHandler(void);
+extern void TC1_IrqHandler(void);
 // Timer Counter 2
-extern WEAK void TC2_IrqHandler(void);
+extern void TC2_IrqHandler(void);
 // PWM Controller
-extern WEAK void PWM_IrqHandler(void);
+extern void PWM_IrqHandler(void);
 // ADC controller0
-extern WEAK void ADCC0_IrqHandler(void);
+extern void ADCC0_IrqHandler(void);
 // ADC controller1
-extern WEAK void ADCC1_IrqHandler(void);
+extern void ADCC1_IrqHandler(void);
 // HDMA
-extern WEAK void HDMA_IrqHandler(void);
+extern void HDMA_IrqHandler(void);
 // USB Device High Speed UDP_HS
-extern WEAK void UDPD_IrqHandler(void);
+extern void UDPD_IrqHandler(void);
 

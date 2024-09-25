@@ -1,5 +1,5 @@
 /*!*********************************************************************************************************************
-@file blade_imu_lsm6dsl.c                                                                
+@file blade_imu_lsm6dsl.c
 @brief Driver for ST LSM6DSL IMU.
 
 Provides configuration service and up to 1kHz of 3-axis acceleration, gyro, and compass data.
@@ -31,6 +31,7 @@ PROTECTED FUNCTIONS
 **********************************************************************************************************************/
 
 #include "configuration.h"
+#include "blade_imu_lsm6dsl.h"
 
 
 /***********************************************************************************************************************
@@ -62,12 +63,12 @@ Function Definitions
 **********************************************************************************************************************/
 
 /*--------------------------------------------------------------------------------------------------------------------*/
-/*! @publicsection */                                                                                            
+/*! @publicsection */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 
 /*--------------------------------------------------------------------------------------------------------------------*/
-/*! @protectedsection */                                                                                            
+/*! @protectedsection */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /*!--------------------------------------------------------------------------------------------------------------------
@@ -87,7 +88,7 @@ to update and display the data received.  This rate *should* be ok for the LCD r
 debug output.
 
 Requires:
-- Blade pins (at least for I²C comms) are configured)
+- Blade pins (at least for Iï¿½C comms) are configured)
 
 Promises:
 - Presence of IMU is determined; if present, default configuration is set up.
@@ -114,7 +115,7 @@ void Bladelsm6dslInitialize(void)
   G_u32Bladelsm6dslData.u8AccelYH = 0;
   G_u32Bladelsm6dslData.u8AccelZL = 0;
   G_u32Bladelsm6dslData.u8AccelZH = 0;
-  
+
   /* Blade resource requests: I2C SCL, SDA, IO2 and IO3 interrupt lines */
   eErrorStatus += BladeRequestPin(BLADE_PIN2, DIGITAL_IN);
   eErrorStatus += BladeRequestPin(BLADE_PIN3, DIGITAL_IN);
@@ -122,13 +123,13 @@ void Bladelsm6dslInitialize(void)
   eErrorStatus += BladeRequestPin(BLADE_PIN9, PERIPHERAL);
   if(eErrorStatus)
   {
-    DebugPrintf("LSM6DSL Blade pin resources not available\n\r"); 
+    DebugPrintf("LSM6DSL Blade pin resources not available\n\r");
   }
   else
   {
-    DebugPrintf("LSM6DSL Blade pin resources allocated\n\r"); 
+    DebugPrintf("LSM6DSL Blade pin resources allocated\n\r");
   }
-  
+
   /* Ping the accelerometer to check it's responding by reading its ID byte */
   TwiWriteReadData(U8_LSM6DSL_I2C_ADDRESS, U8_WHO_AM_I, &u8RxMessage, 1);
   if(u8RxMessage != U8_LSM6DSL_ID)
@@ -141,11 +142,11 @@ void Bladelsm6dslInitialize(void)
     DebugPrintf("LSM6DSL returned ID: ");
     DebugPrintNumber(u8RxMessage);
     DebugLineFeed();
-    
+
     /* Send basic configuration - the two registers are sequential so can be done in a single write */
     TwiWriteData(U8_LSM6DSL_I2C_ADDRESS, 3, au8TxMessage, TWI_STOP);
   }
- 
+
   /* If good initialization, set state to Idle */
   if( eErrorStatus == SUCCESS )
   {
@@ -160,7 +161,7 @@ void Bladelsm6dslInitialize(void)
 
 } /* end Bladelsm6dslInitialize() */
 
-  
+
 /*!----------------------------------------------------------------------------------------------------------------------
 @fn void Bladelsm6dslRunActiveState(void)
 
@@ -184,7 +185,7 @@ void Bladelsm6dslRunActiveState(void)
 
 
 /*------------------------------------------------------------------------------------------------------------------*/
-/*! @privatesection */                                                                                            
+/*! @privatesection */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 
@@ -206,17 +207,17 @@ static void Bladelsm6dslSM_Idle(void)
   u8* pu8NumberParser;
   u8* pu8StringParser;
   u8  u8Digits;
-  
+
   /* Read the latest IMU data if it's time */
   if( IsTimeUp(&Bladelsm6dsl_u32Timeout, U32_MEASUREMENT_RATE_MS) )
   {
     Bladelsm6dsl_u32Timeout = G_u32SystemTime1ms;
     TwiWriteReadData(U8_LSM6DSL_I2C_ADDRESS, U8_OUT_TEMP_L, &G_u32Bladelsm6dslData.u8TempL, 14);
-    
+
     /* Write data to debug this will be 1 write behind newest data since the command will not yet be queued */
     pu8NumberIndex = &G_u32Bladelsm6dslData.u8TempL;
     pu8StringParser = au8Outputmessage;
-    
+
     for(u8 i = 0; i < 7; i++)
     {
       u32Number = 0;
@@ -226,7 +227,7 @@ static void Bladelsm6dslSM_Idle(void)
       pu8NumberIndex++;
       u8Digits = NumberToAscii(u32Number, au8NumberString);
       pu8NumberParser = au8NumberString;
-      
+
       /* Copy ASCII number into result string including leading 0s */
       u8Digits = 5 - u8Digits;
       for(u8 j= 0; j < u8Digits; j++)
@@ -241,22 +242,22 @@ static void Bladelsm6dslSM_Idle(void)
         pu8StringParser++;
         pu8NumberParser++;
       }
-      
+
       /* Skip the space */
       pu8StringParser++;
     } /* end for(u8 i = 0; i < 7; i++) */
-    
+
     DebugPrintf(au8Outputmessage);
   } /* end if( IsTimeUp(&Bladelsm6dsl_u32Timeout, U32_MEASUREMENT_RATE_MS) ) */
-  
+
 } /* end Bladelsm6dslSM_Idle() */
-     
+
 
 /*-------------------------------------------------------------------------------------------------------------------*/
 /* Handle an error */
-static void Bladelsm6dslSM_Error(void)          
+static void Bladelsm6dslSM_Error(void)
 {
-  
+
 } /* end Bladelsm6dslSM_Error() */
 
 
