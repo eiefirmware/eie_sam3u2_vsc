@@ -376,12 +376,13 @@ def get_jlink_srch_path(exe_name: str):
     jlink_installs = []
 
     if Utils.is_win32:
-
-        install_roots = [
-            "C:\\Program Files\\SEGGER\\",
-            "C:\\Program Files (x86)\\SEGGER\\",
-            "D:\\SEGGER\\JLink_V798i",
-        ]
+        # For now just hard-code the default install paths. Don't include default search path due to
+        # conflicts with java's linker. User can still override with an explicit JLINK=... on the
+        # command line.
+        return [
+            "C:\\Program Files\\SEGGER\\JLink",
+            "C:\\Program Files (x86)\\SEGGER\\JLink",
+        ] + paths
 
     elif Utils.unversioned_sys_platform() == "darwin":
         install_roots = ["/Application/SEGGER/JLink"]
@@ -444,7 +445,7 @@ def get_gcc_srch_path_win32():
     import winreg
 
     REGISTRY_PATHS = [(winreg.HKEY_LOCAL_MACHINE, "SOFTWARE\\WOW6432Node\\ARM")]
-    INSTALL_PATHS = ["D:\\Arm_GNU_Toolchain\\13_3_rel1\\arm-none-eabi"]
+    INSTALL_PATHS = ["C:\\Program Files (x86)\\Arm GNU Toolchain arm-none-eabi"]
 
     gcc_vers = defaultdict(set)  # Map from version numbers to discovered paths.
 

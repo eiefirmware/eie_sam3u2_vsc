@@ -103,7 +103,7 @@ void LcdCommand(u8 u8Command_)
   /* Update the command paramter into the command array */
   au8LCDWriteCommand[1] = u8Command_;
     
-  /* Queue the command to the Iï¿½C application */
+  /* Queue the command to the I²C application */
   TwiWriteData(U8_LCD_ADDRESS, sizeof(au8LCDWriteCommand), &au8LCDWriteCommand[0], TWI_STOP);
 
   /* Add a delay during initialization to let the command send properly */
@@ -223,8 +223,8 @@ void LcdInitialize(void)
     LCD_CONTRAST_CMD, LCD_DISPLAY_SET_CMD, LCD_FOLLOWER_CMD 
   };
                  /* "012345567890123456789" */
-  u8 au8Welcome[]  = "RAZOR SAM3U2 ASCII   ";
- 
+  u8 au8Welcome[] = "RAZOR SAM3U2 ASCII   ";
+  
   /* State to Idle */
   Lcd_pfnStateMachine = LcdSM_Idle;
   
