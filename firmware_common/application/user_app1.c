@@ -3,6 +3,7 @@
 @brief User's tasks / applications are written here.  This description
 should be replaced by something specific to the task.
 
+Test change yay
 ----------------------------------------------------------------------------------------------------------------------
 To start a new task using this user_app1 as a template:
  1. Copy both user_app1.c and user_app1.h to the Application directory
