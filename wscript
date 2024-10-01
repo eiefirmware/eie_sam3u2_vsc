@@ -455,7 +455,10 @@ def get_gcc_srch_path_win32():
         pth = pathlib.Path(pth) / "bin"
         ver = check_gcc_ver(pth, ext="exe")
         if ver:
-            gcc_vers[ver].add(str(pth))
+            # Some older/alternate toolchains use the year as the current version number
+            # (eg. "2021"). For EiE we will just ignore them.
+            if ver[0] < 1000:
+                gcc_vers[ver].add(str(pth))
 
     for root, subk in REGISTRY_PATHS:
         try:
