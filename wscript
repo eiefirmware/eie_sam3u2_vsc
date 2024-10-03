@@ -375,6 +375,10 @@ def get_jlink_srch_path(exe_name: str):
     install_roots = []
     jlink_installs = []
 
+    # Hard-coded paths for Jason's computer that doesn't work otherwise...
+    return [
+            "D:\\SEGGER\\JLink_V798i",
+        ] + paths
     if Utils.is_win32:
 
         install_roots = [

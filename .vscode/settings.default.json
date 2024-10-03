@@ -8,7 +8,7 @@
     // too much automatic magic.
     "cortex-debug.armToolchainPath.windows": "C:\\Program Files (x86)\\Arm GNU Toolchain arm-none-eabi\\13.3 rel1\\bin",
     "cortex-debug.armToolchainPath.osx": "/Application/ArmGNUToolchain/13.3.rel1/arm-none-eabi/bin",
-    "cortex-debug.JLinkGDBServerPath.windows": "C:\\Program Files\\SEGGER\\JLink\\JLinkGDBServerCL.exe",
+    "cortex-debug.JLinkGDBServerPath.windows": "D:\\SEGGER\\JLink_V798i\\JLinkGDBServerCL.exe",
     "cortex-debug.JLinkGDBServerPath.osx": "/Application/SEGGER/JLink/JLinkGDBServerCLExe",
     "cortex-debug.JLinkGDBServerPath.linux": "/opt/SEGGER/JLink/JLinkGDBServerCLExe",
 }
