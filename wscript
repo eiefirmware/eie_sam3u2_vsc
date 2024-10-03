@@ -371,6 +371,10 @@ def get_jlink_srch_path(exe_name: str):
     # JLink installer gives the option to update the "current instance", which
     # is installed under the "Jlink" subfolder. Otherwise it installs a version
     # specific folder.
+    return [
+            "C:\\Program Files\\SEGGER\\JLink",
+            "D:\\SEGGER\\JLink_V798i",
+        ] + paths
 
     install_roots = []
     jlink_installs = []
