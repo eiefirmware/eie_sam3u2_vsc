@@ -2,25 +2,128 @@
     // See https://go.microsoft.com/fwlink/?LinkId=733558
     // for the documentation about the tasks.json format
     "version": "2.0.0",
-    "tasks": [
+    "tasks":
+    [
         {
-            "label": "Build firmware",
+            "label": "[waf] configure ASCII",
             "type": "process",
             "command": "python",
-            "args": [
+            "args":
+            [
                 "waf",
-                "build",
-                "--keep", // Keep going even if error, ensures all compilation failures are found.
+                "configure",
+                "--board=ASCII",
             ],
             "isBuildCommand": true,
-            "problemMatcher": {
+            "problemMatcher":
+            {
                 "base": "$gcc",
-                "fileLocation": [
+                "fileLocation":
+                [
                     "autoDetect",
                     "${workspaceFolder}/build/",
                 ]
             },
-            "options": {
+            "options":
+            {
+                "cwd": "${workspaceFolder}",
+            },
+        },
+        {
+            "label": "[waf] configure DOT_MATRIX",
+            "type": "process",
+            "command": "python",
+            "args":
+            [
+                "waf",
+                "configure",
+                "--board=DOT_MATRIX",
+            ],
+            "isBuildCommand": true,
+            "problemMatcher":
+            {
+                "base": "$gcc",
+                "fileLocation":
+                [
+                    "autoDetect",
+                    "${workspaceFolder}/build/",
+                ]
+            },
+            "options":
+            {
+                "cwd": "${workspaceFolder}",
+            },
+        },
+        {
+            "label": "[waf] build",
+            "type": "process",
+            "command": "python",
+            "args":
+            [
+                "waf",
+                "build",
+            ],
+            "isBuildCommand": true,
+            "problemMatcher":
+            {
+                "base": "$gcc",
+                "fileLocation":
+                [
+                    "autoDetect",
+                    "${workspaceFolder}/build/",
+                ]
+            },
+            "options":
+            {
+                "cwd": "${workspaceFolder}",
+            },
+        },
+        {
+            "label": "[waf] build & flash",
+            "type": "process",
+            "command": "python",
+            "args":
+            [
+                "waf",
+                "build",
+                "-F",
+            ],
+            "isBuildCommand": true,
+            "problemMatcher":
+            {
+                "base": "$gcc",
+                "fileLocation":
+                [
+                    "autoDetect",
+                    "${workspaceFolder}/build/",
+                ]
+            },
+            "options":
+            {
+                "cwd": "${workspaceFolder}",
+            },
+        },
+        {
+            "label": "[git] clean workspace",
+            "type": "process",
+            "command": "git",
+            "args":
+            [
+                "clean",
+                "-diX",
+            ],
+            "isBuildCommand": true,
+            "problemMatcher":
+            {
+                "base": "$gcc",
+                "fileLocation":
+                [
+                    "autoDetect",
+                    "${workspaceFolder}/build/",
+                ]
+            },
+            "options":
+            {
                 "cwd": "${workspaceFolder}",
             },
         }
