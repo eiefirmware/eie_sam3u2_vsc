@@ -92,6 +92,40 @@ Promises:
 */
 void UserApp1Initialize(void)
 {
+  /* Initialize all LEDs to OFF */
+  LedOff(RED0);
+  LedOff(GREEN0);
+  LedOff(BLUE0);
+
+  LedOff(RED1);
+  LedOff(GREEN1);
+  LedOff(BLUE1);
+  
+  LedOff(RED2);
+  LedOff(GREEN2);
+  LedOff(BLUE2);
+
+  LedOff(RED3);
+  LedOff(GREEN3);
+  LedOff(BLUE3);
+
+  LedOff(LCD_BL);
+
+
+#if 0 /* The exercise code */
+  /* Turn on the left side blue LED with the LedOn function */
+  LedOn(BLUE0);
+
+  /* Turn on the right side red LED with the LedToggle function (what assumption is being made?) */
+  LedOn(RED3);
+
+  /* Set the 3rd LED to blink green */
+  LedBlink(GREEN2, LED_2HZ);
+
+  /* Set the 2nd LED to the dimmest level available */
+  LedPWM(BLUE1, LED_PWM_5);
+#endif
+
   /* If good initialization, set state to Idle */
   if( 1 )
   {
@@ -137,9 +171,134 @@ void UserApp1RunActiveState(void)
 State Machine Function Definitions
 **********************************************************************************************************************/
 /*-------------------------------------------------------------------------------------------------------------------*/
-/* What does this state do? */
+/* Implement a 4-bit binary counter */
 static void UserApp1SM_Idle(void)
 {
+  static u16 u16BlinkCount = 0;
+  static u8  u8Counter = 0;
+  static u8  u8ColorIndex = 0;
+
+  /* The color order will be Red, Yellow, Green, Cyan, Blue, Purple, White (u8ColorIndex 0 to 6)*/
+  static u8 aau8Color[][3] = {{RED0, 0xff, 0xff},     /* Red */
+                              {RED0, GREEN0, 0xff},   /* Yellow */
+                              {0xff, GREEN0, 0xff},   /* Green  */
+                              {0xff, GREEN0, BLUE0},  /* Cyan   */
+                              {0xff, 0xff,   BLUE0},  /* Blue   */
+                              {RED0, 0xff,   BLUE0},  /* Purple */
+                              {RED0, GREEN0, BLUE0}}; /* White  */
+
+  u8 u8Offset = 0;
+
+  /* Update counter to determine if it's time to increment the 4-bit counter value */
+  u16BlinkCount++;
+  if(u16BlinkCount == 250)
+  {
+    /* Reset the period counter and proceed to udpate the display with the new 4-bit value */
+    u16BlinkCount = 0;
+    
+    /* Update the counter and roll at 16 */
+    u8Counter++;
+    if(u8Counter == 16)
+    {
+      u8Counter = 0;
+
+      /* Change the color when the counter restarts */
+      u8ColorIndex++;
+      if(u8ColorIndex == 7)
+      {
+        u8ColorIndex = 0;
+      }
+    }
+
+
+    /* Use knowledge of LedNameType to use a loop for initializing all LEDs to off state */
+    for(u8 i = 0; i < (U8_TOTAL_LEDS - 1); i++)
+    {
+      LedOff( (LedNameType)i );
+    }
+
+    /* Set color for each bit (LED) in the 4-bit counter */
+    if(u8Counter & 0x01)
+    {
+      u8Offset = 3; /* The numerical difference between LED elements of the same color (e.g. RED3 - RED0 = 3) */
+      for(u8 j = 0; j < 3; j++)
+      {
+        if(aau8Color[u8ColorIndex][j] != 0xff)
+        {
+          LedOn( (aau8Color[u8ColorIndex][j]) + u8Offset);
+        }
+      }
+    }
+
+    if(u8Counter & 0x02)
+    {
+      u8Offset = 2; /* The numerical difference between LED elements of the same color */
+      for(u8 j = 0; j < 3; j++)
+      {
+        if(aau8Color[u8ColorIndex][j] != 0xff)
+        {
+          LedOn( (aau8Color[u8ColorIndex][j]) + u8Offset);
+        }
+      }
+    }
+
+    if(u8Counter & 0x04)
+    {
+      u8Offset = 1; /* The numerical difference between LED elements of the same color */
+      for(u8 j = 0; j < 3; j++)
+      {
+        if(aau8Color[u8ColorIndex][j] != 0xff)
+        {
+          LedOn( (aau8Color[u8ColorIndex][j]) + u8Offset);
+        }
+      }
+    }
+
+    if(u8Counter & 0x08)
+    {
+      u8Offset = 0; /* The numerical difference between LED elements of the same color */
+      for(u8 j = 0; j < 3; j++)
+      {
+        if(aau8Color[u8ColorIndex][j] != 0xff)
+        {
+          LedOn( (aau8Color[u8ColorIndex][j]) + u8Offset);
+        }
+      }
+    }
+
+#if 0 /* First exercise */
+    /* Turn all the LEDs off, then parse the current u8Counter value to turn back the correct LEDs.  
+    RED3 is BIT0, GREEN2 is BIT1, BLUE1 is BIT2, RED0 and BLUE0 are BIT3 to get purple */
+
+    LedOff(RED3);
+    LedOff(GREEN2);
+    LedOff(BLUE1);
+    LedOff(BLUE0);
+    LedOff(RED0);
+
+
+    if(u8Counter & 0x01)
+    {
+      LedOn(RED3);
+    }
+
+    if(u8Counter & 0x02)
+    {
+      LedOn(GREEN2);
+    }
+
+    if(u8Counter & 0x04)
+    {
+      LedOn(BLUE1);
+    }
+
+    if(u8Counter & 0x08)
+    {
+      LedOn(RED0);
+      LedOn(BLUE0);
+    }
+#endif /* First exercise */
+  } /* end if(u16BlinkCount == 250) */
      
 } /* end UserApp1SM_Idle() */
      
