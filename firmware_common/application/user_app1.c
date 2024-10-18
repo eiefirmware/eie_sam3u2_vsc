@@ -46,7 +46,6 @@ All Global variable names shall start with "G_<type>UserApp1"
 /* New variables */
 volatile u32 G_u32UserApp1Flags;                          /*!< @brief Global state flags */
 
-
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* Existing variables (defined in other files -- should all contain the "extern" keyword) */
 extern volatile u32 G_u32SystemTime1ms;                   /*!< @brief From main.c */
@@ -60,6 +59,7 @@ Global variable definitions with scope limited to this local application.
 Variable names shall start with "UserApp1_<type>" and be declared as static.
 ***********************************************************************************************************************/
 static fnCode_type UserApp1_pfStateMachine;               /*!< @brief The state machine function pointer */
+#define U16_COUNTER_PERIOD_MS (u16)500;
 //static u32 UserApp1_u32Timeout;                           /*!< @brief Timeout counter used across states */
 
 
@@ -92,6 +92,16 @@ Promises:
 */
 void UserApp1Initialize(void)
 {
+  LedOff(CYAN); //setting up the initial states
+  LedOff(GREEN);
+  LedOff(YELLOW);
+  LedOff(ORANGE);
+
+  LedOn(BLUE);
+  LedOn(PURPLE);
+
+  LedBlink(RED, LED_2HZ);
+  LedPWM(WHITE, LED_PWM_5);
   /* If good initialization, set state to Idle */
   if( 1 )
   {
@@ -140,7 +150,28 @@ State Machine Function Definitions
 /* What does this state do? */
 static void UserApp1SM_Idle(void)
 {
-     
+ static u16 u16_heartbeat_counter = U16_COUNTER_PERIOD_MS;
+ static int turn_light = 0;
+
+ u16_heartbeat_counter -= 1;
+ if (u16_heartbeat_counter == 0) { 
+  u16_heartbeat_counter = U16_COUNTER_PERIOD_MS;
+  if (turn_light == 0){
+    HEARTBEAT_OFF();
+    turn_light = 1;
+  }
+  else{
+    HEARTBEAT_ON();
+    turn_light = 0;
+  }
+
+ }
+static u16 u16BlinkCount = 0;
+u16BlinkCount++;
+if (u16BlinkCount == 250){
+  u16BlinkCount = 0;
+  LedToggle(PURPLE);
+}
 } /* end UserApp1SM_Idle() */
      
 
