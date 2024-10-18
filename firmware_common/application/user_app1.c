@@ -170,7 +170,7 @@ static void UserApp1SM_Idle(void)
     HEARTBEAT_ON();
     turn_light = 0;
   }
- if (u8_backlight_counter == 40){
+ if (u8_backlight_counter == 10){
   LedPWM(LCD_BLUE, PWM_counter);
   PWM_counter++;
  }
