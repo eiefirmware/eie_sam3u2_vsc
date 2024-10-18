@@ -66,6 +66,42 @@ static fnCode_type UserApp1_pfStateMachine;               /*!< @brief The state 
 /**********************************************************************************************************************
 Function Definitions
 **********************************************************************************************************************/
+void switch_led(int number){
+  switch (number){
+    case 0:
+      LedOn(WHITE);
+      LedOff(RED);
+      break;
+    case 1:
+      LedOn(PURPLE);
+      LedOff(WHITE);
+      break;
+    case 2:
+      LedOn(BLUE);
+      LedOff(PURPLE);
+      break;
+    case 3:
+      LedOn(CYAN);
+      LedOff(BLUE);
+      break;
+    case 4:
+      LedOn(GREEN);
+      LedOff(CYAN);
+      break;
+    case 5:
+      LedOn(YELLOW);
+      LedOff(GREEN);
+      break;
+    case 6:
+      LedOn(ORANGE);
+      LedOff(YELLOW);
+      break;
+    case 7:
+      LedOn(RED);
+      LedOff(ORANGE);
+      break;
+  }
+}
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /*! @publicsection */                                                                                            
@@ -97,6 +133,14 @@ void UserApp1Initialize(void)
   {
     UserApp1_pfStateMachine = UserApp1SM_Idle;
     HEARTBEAT_OFF();
+    LedOff(WHITE);
+    LedOff(PURPLE);
+    LedOff(BLUE);
+    LedOff(CYAN);
+    LedOff(GREEN);
+    LedOff(YELLOW);
+    LedOff(ORANGE);
+    LedOff(RED);
   }
   else
   {
@@ -143,8 +187,9 @@ static void UserApp1SM_Idle(void)
 {
   static u16 u16Counter = U16_COUNTER_PERIOD_MS; //Time is initialized
 
-  
   static bool bLightIsOn = FALSE;
+  static int led_number = 0;
+
   u16Counter--;
   
   if (u16Counter == 0){
@@ -159,6 +204,13 @@ static void UserApp1SM_Idle(void)
       HEARTBEAT_ON();
       bLightIsOn = TRUE;
     }
+
+  if(led_number == 7)
+    led_number = 0;
+
+  switch_led(led_number);
+  led_number++;
+    
   }
   
  /* end UserApp1SM_Idle() */
