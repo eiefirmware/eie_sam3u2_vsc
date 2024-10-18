@@ -175,7 +175,7 @@ static void UserApp1SM_Idle(void)
  if (u8_backlight_counter == 40){
   LedPWM(LCD_BLUE, PWM_counter);
   PWM_counter++;
-  if (PWM_counter == LED_PWM_100){
+  if (PWM_counter == LED_PWM_10){
     switch_axis = 1;
   }
   if (switch_axis == 1){
@@ -183,7 +183,7 @@ static void UserApp1SM_Idle(void)
   }
   if (PWM_counter == LED_PWM_0)
     switch_axis = 0;
-  if (u8_backlight_counter == 2)
+  if (u8_backlight_counter == 40)
     u8_backlight_counter = 0;
  }
  }
