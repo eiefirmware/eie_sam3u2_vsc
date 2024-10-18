@@ -172,7 +172,7 @@ static void UserApp1SM_Idle(void)
     turn_light = 0;
   }
  }
- if (u8_backlight_counter == 2){
+ if (u8_backlight_counter == 40){
   LedPWM(LCD_BLUE, PWM_counter);
   PWM_counter++;
   if (PWM_counter == LED_PWM_100){
