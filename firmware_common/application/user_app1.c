@@ -102,8 +102,8 @@ void UserApp1Initialize(void)
   LedOff(RED);
 
   LedOn(LCD_RED);
-  LedOn(LCD_GREEN);
-  LedOn(LCD_BLUE);
+  LedOff(LCD_GREEN);
+  LedOff(LCD_BLUE);
 
   /* If good initialization, set state to Idle */
   if( 1 )
@@ -155,8 +155,11 @@ static void UserApp1SM_Idle(void)
 {
  static u16 u16_heartbeat_counter = U16_COUNTER_PERIOD_MS;
  static int turn_light = 0;
+ static u8 u8_backlight_counter;
+ static u8 PWM_counter = LED_PWM_100;
 
  u16_heartbeat_counter -= 1;
+ u8_backlight_counter++;
  if (u16_heartbeat_counter == 0) { 
   u16_heartbeat_counter = U16_COUNTER_PERIOD_MS;
   if (turn_light == 0){
@@ -167,87 +170,14 @@ static void UserApp1SM_Idle(void)
     HEARTBEAT_ON();
     turn_light = 0;
   }
-
+ if (u8_backlight_counter == 40){
+  LedPWM(BLUE, PWM_counter);
+  PWM_counter--;
  }
-static u16 u16BlinkCount = 0;
-static u8 u8Counter = 0;
-static u8 u8ColorIndex = 0;
-u16BlinkCount++;
-if (u16BlinkCount == 250){
-  u16BlinkCount = 0;
-  u8Counter++;
+ }
 
-  if (u8Counter == 16){
-    u8Counter = 0;
-    u8ColorIndex++;
-  }
-  
-  if (u8Counter & 0x01)
-    LedOn(RED);
-  
-  else
-    LedOff(RED);
-
-  if (u8Counter & 0x02)
-    LedOn(ORANGE);
-
-  else
-    LedOff(ORANGE);
-  
-  if (u8Counter & 0x04)
-    LedOn(YELLOW);
-
-  else
-    LedOff(YELLOW);
-
-  if (u8Counter & 0x08)
-    LedOn(GREEN);
-
-  else
-    LedOff(GREEN);
-  
-  if (u8ColorIndex == 7)
-    u8ColorIndex = 0;
-
-  switch(u8ColorIndex){
-    case 0: // turn lcd backlight red
-      LedOn(LCD_RED);
-      LedOff(LCD_GREEN);
-      LedOff(LCD_BLUE);
-      break;
-    case 1: // turn lcd backlight yellow
-      LedOn(LCD_RED);
-      LedOn(LCD_GREEN);
-      LedOff(LCD_BLUE);
-      break;
-    case 2: // turn lcd backlight green
-      LedOff(LCD_RED);
-      LedOn(LCD_GREEN);
-      LedOff(LCD_BLUE);
-      break;
-    case 3: // turn lcd backlight cyan
-      LedOff(LCD_RED);
-      LedOn(LCD_GREEN);
-      LedOn(LCD_BLUE);
-      break;
-    case 4: // turn lcd blacklight blue
-      LedOff(LCD_RED);
-      LedOff(LCD_GREEN);
-      LedOn(LCD_BLUE);
-      break;
-    case 5: // turn backlight purple
-      LedOn(LCD_RED);
-      LedOff(LCD_GREEN);
-      LedOn(LCD_BLUE);
-      break;
-    case 6: // turn blacklight white
-      LedOn(LCD_RED);
-      LedOn(LCD_GREEN);
-      LedOn(LCD_BLUE);
-      break;
-  }
 }
-} /* end UserApp1SM_Idle() */
+/* end UserApp1SM_Idle() */
      
 
 /*-------------------------------------------------------------------------------------------------------------------*/
