@@ -184,7 +184,7 @@ static void UserApp1SM_Idle(void)
   if (PWM_counter == LED_PWM_0)
     switch_axis = 0;
   if (u8_backlight_counter == 2)
-    u8_backlight_counter = 0
+    u8_backlight_counter = 0;
  }
  }
 
