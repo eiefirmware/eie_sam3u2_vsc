@@ -146,22 +146,23 @@ static void UserApp1SM_Idle(void)
   
   static bool bLightIsOn = FALSE;
   u16Counter--;
+  
   if (u16Counter == 0){
     u16Counter = U16_COUNTER_PERIOD_MS;
-  }
+    
+    if (bLightIsOn){
+      HEARTBEAT_OFF();
+      bLightIsOn = FALSE;
+    }
   
-  if (u16Counter == 0){
-    HEARTBEAT_OFF();
-    bLightIsOn = FALSE;
+    else{
+      HEARTBEAT_ON();
+      bLightIsOn = TRUE;
+    }
   }
-  else{
-    HEARTBEAT_ON();
-    bLightIsOn = TRUE;
-  }
-} 
   
  /* end UserApp1SM_Idle() */
-     
+}
 
 /*------------------------------------------------------------------------------------------------------------------*/
 /* Handle an error */
