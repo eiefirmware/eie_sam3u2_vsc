@@ -214,30 +214,37 @@ if (u16BlinkCount == 250){
       LedOn(LCD_RED);
       LedOff(LCD_GREEN);
       LedOff(LCD_BLUE);
+      break;
     case 1: // turn lcd backlight yellow
       LedOn(LCD_RED);
       LedOn(LCD_GREEN);
       LedOff(LCD_BLUE);
+      break;
     case 2: // turn lcd backlight green
       LedOff(LCD_RED);
       LedOn(LCD_GREEN);
       LedOff(LCD_BLUE);
+      break;
     case 3: // turn lcd backlight cyan
       LedOff(LCD_RED);
       LedOn(LCD_GREEN);
       LedOn(LCD_BLUE);
+      break;
     case 4: // turn lcd blacklight blue
       LedOff(LCD_RED);
       LedOff(LCD_GREEN);
       LedOn(LCD_BLUE);
+      break;
     case 5: // turn backlight purple
       LedOn(LCD_RED);
       LedOff(LCD_GREEN);
       LedOn(LCD_BLUE);
+      break;
     case 6: // turn blacklight white
       LedOn(LCD_RED);
       LedOn(LCD_GREEN);
       LedOn(LCD_BLUE);
+      break;
   }
 }
 } /* end UserApp1SM_Idle() */
