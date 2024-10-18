@@ -157,6 +157,7 @@ static void UserApp1SM_Idle(void)
  static int turn_light = 0;
  static u8 u8_backlight_counter = 0;
  static u8 PWM_counter = LED_PWM_0;
+ static u8 switch_axis = 0;
 
  u16_heartbeat_counter -= 1;
  u8_backlight_counter++;
@@ -174,6 +175,14 @@ static void UserApp1SM_Idle(void)
  if (u8_backlight_counter == 10){
   LedPWM(LCD_BLUE, PWM_counter);
   PWM_counter++;
+  if (PWM_counter == LED_PWM_100){
+    switch_axis = 1;
+  }
+  if (switch_axis = 1){
+    PWM_counter--;
+  }
+  if (PWM_counter == LED_PWM_0)
+    switch_axis = 0;
  }
  }
 
