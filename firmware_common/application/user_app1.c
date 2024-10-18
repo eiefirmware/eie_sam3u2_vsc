@@ -143,10 +143,22 @@ static void UserApp1SM_Idle(void)
 {
     static u16 u16Counter = 0;
     static bool lightOn = FALSE;
+    static u16 speed = 0;
+    static u16 interval = U16_COUNTER_PERIOD_MS;
 
     u16Counter++;
-    if (u16Counter == U16_COUNTER_PERIOD_MS)
+    if (u16Counter == interval)
     {
+      speed++;
+      if (speed % 10 == 0)
+      {
+        interval/=2;
+        if (speed == 40)
+        {
+          interval = U16_COUNTER_PERIOD_MS;
+          speed = 0;
+        }
+      }
       if(lightOn)
       {
         HEARTBEAT_OFF();
