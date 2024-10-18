@@ -19,6 +19,7 @@ import os
 import pathlib
 import re
 import subprocess
+import subprocess
 
 import waflib.Configure as ConfMod
 from waflib.Configure import conf
