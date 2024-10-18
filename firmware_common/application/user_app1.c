@@ -188,7 +188,7 @@ static void UserApp1SM_Idle(void)
   if (PWM_counter == LED_PWM_0){
     switch_axis = 0;
   }
-  LedPWM(LCD_BLUE, PWM_counter);
+  LedPWM(LCD_GREEN, PWM_counter);
  }
  }
 
