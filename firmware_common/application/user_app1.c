@@ -156,7 +156,7 @@ static void UserApp1SM_Idle(void)
  static u16 u16_heartbeat_counter = U16_COUNTER_PERIOD_MS;
  static int turn_light = 0;
  static u8 u8_backlight_counter;
- static u8 PWM_counter = LED_PWM_100;
+ static u8 PWM_counter = LED_PWM_0;
 
  u16_heartbeat_counter -= 1;
  u8_backlight_counter++;
@@ -172,7 +172,7 @@ static void UserApp1SM_Idle(void)
   }
  if (u8_backlight_counter == 40){
   LedPWM(LCD_BLUE, PWM_counter);
-  PWM_counter--;
+  PWM_counter++;
  }
  }
 
