@@ -101,9 +101,9 @@ void UserApp1Initialize(void)
   LedOff(ORANGE);
   LedOff(RED);
 
-  LedOn(LCD_RED);
+  LedOff(LCD_RED);
   LedOff(LCD_GREEN);
-  LedOff(LCD_BLUE);
+  LedOn(LCD_BLUE);
 
   /* If good initialization, set state to Idle */
   if( 1 )
