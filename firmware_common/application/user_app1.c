@@ -171,13 +171,16 @@ static void UserApp1SM_Idle(void)
  }
 static u16 u16BlinkCount = 0;
 static u8 u8Counter = 0;
+static u8 u8ColorIndex = 0;
 u16BlinkCount++;
 if (u16BlinkCount == 250){
   u16BlinkCount = 0;
   u8Counter++;
 
-  if (u8Counter == 16)
+  if (u8Counter == 16){
     u8Counter = 0;
+    u8ColorIndex++;
+  }
   
   if (u8Counter & 0x01)
     LedOn(RED);
@@ -202,6 +205,40 @@ if (u16BlinkCount == 250){
 
   else
     LedOff(GREEN);
+  
+  if (u8ColorIndex == 7)
+    u8ColorIndex = 0;
+
+  switch(u8ColorIndex){
+    case 0: // turn lcd backlight red
+      LedOn(LCD_RED);
+      LedOff(LCD_GREEN);
+      LedOff(LCD_BLUE);
+    case 1: // turn lcd backlight yellow
+      LedOn(LCD_RED);
+      LedOn(LCD_GREEN);
+      LedOff(LCD_BLUE);
+    case 2: // turn lcd backlight green
+      LedOff(LCD_RED);
+      LedOn(LCD_GREEN);
+      LedOff(LCD_BLUE);
+    case 3: // turn lcd backlight cyan
+      LedOff(LCD_RED);
+      LedOn(LCD_GREEN);
+      LedOn(LCD_BLUE);
+    case 4: // turn lcd blacklight blue
+      LedOff(LCD_RED);
+      LedOff(LCD_GREEN);
+      LedOn(LCD_BLUE);
+    case 5: // turn backlight purple
+      LedOn(LCD_RED);
+      LedOff(LCD_GREEN);
+      LedOn(LCD_BLUE);
+    case 6: // turn blacklight white
+      LedOn(LCD_RED);
+      LedOn(LCD_GREEN);
+      LedOn(LCD_BLUE);
+  }
 }
 } /* end UserApp1SM_Idle() */
      
