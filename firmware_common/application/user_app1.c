@@ -178,7 +178,7 @@ static void UserApp1SM_Idle(void)
   if (PWM_counter == LED_PWM_100){
     switch_axis = 1;
   }
-  if (switch_axis = 1){
+  if (switch_axis == 1){
     PWM_counter--;
   }
   if (PWM_counter == LED_PWM_0)
