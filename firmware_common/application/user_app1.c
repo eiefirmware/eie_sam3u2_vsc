@@ -92,6 +92,11 @@ Promises:
 */
 void UserApp1Initialize(void)
 {
+  // Basic Functions of the Matrix showing different capabilities of different functions.
+  LedOn(BLUE0);
+  LedToggle(RED3);
+  LedBlink(GREEN2, LED_2HZ);
+  LedPWM(BLUE1, LED_PWM_5);
   /* If good initialization, set state to Idle */
   if( 1 )
   {
@@ -140,7 +145,13 @@ State Machine Function Definitions
 /* What does this state do? */
 static void UserApp1SM_Idle(void)
 {
-     
+     static u16 u16BlinkCount = 0;
+     u16BlinkCount++;
+     if (u16BlinkCount == 250)
+     {
+        LedToggle(RED3);
+        u16BlinkCount = 0;
+     }
 } /* end UserApp1SM_Idle() */
      
 
