@@ -92,16 +92,19 @@ Promises:
 */
 void UserApp1Initialize(void)
 {
-  LedOff(CYAN); //setting up the initial states
+  LedOff(WHITE); //setting up the initial states
+  LedOff(PURPLE);
+  LedOff(BLUE);
+  LedOff(CYAN);
   LedOff(GREEN);
   LedOff(YELLOW);
   LedOff(ORANGE);
+  LedOff(RED);
 
-  LedOn(BLUE);
-  LedOn(PURPLE);
+  LedOn(LCD_RED);
+  LedOn(LCD_GREEN);
+  LedOn(LCD_BLUE);
 
-  LedBlink(RED, LED_2HZ);
-  LedPWM(WHITE, LED_PWM_5);
   /* If good initialization, set state to Idle */
   if( 1 )
   {
@@ -167,10 +170,38 @@ static void UserApp1SM_Idle(void)
 
  }
 static u16 u16BlinkCount = 0;
+static u8 u8Counter = 0;
 u16BlinkCount++;
 if (u16BlinkCount == 250){
   u16BlinkCount = 0;
-  LedToggle(PURPLE);
+  u8Counter++;
+
+  if (u8Counter == 16)
+    u8Counter = 0;
+  
+  if (u8Counter & 0x01)
+    LedOn(RED);
+  
+  else
+    LedOff(RED);
+
+  if (u8Counter & 0x02)
+    LedOn(ORANGE);
+
+  else
+    LedOff(ORANGE);
+  
+  if (u8Counter & 0x04)
+    LedOn(YELLOW);
+
+  else
+    LedOff(YELLOW);
+
+  if (u8Counter & 0x08)
+    LedOn(GREEN);
+
+  else
+    LedOff(GREEN);
 }
 } /* end UserApp1SM_Idle() */
      
