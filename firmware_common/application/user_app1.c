@@ -66,39 +66,96 @@ static fnCode_type UserApp1_pfStateMachine;               /*!< @brief The state 
 /**********************************************************************************************************************
 Function Definitions
 **********************************************************************************************************************/
-void switch_led(int number){
-  switch (number){
+void switch_led_L2R(int number){
+  LedOn(number);
+  LedOff(number-1);
+}
+
+void switch_led_R2L(int number){
+  LedOn(number);
+  LedOff(number+1);
+}
+
+void led_all_on_off(void){
+  int led;
+
+  for(led = 0; led <= 7; led++)
+    LedOn(led);
+
+  for(led = 7; led >= 0; led--)
+    LedOff(led);
+}
+
+void led_all_on(void){
+  int led;
+  for(led=0;led<=7;led++)
+    LedOn(led);
+}
+
+void led_all_off(void){
+  int led;
+  for(led=7;led>=0;led--){
+    LedOff(led);
+  }
+}
+
+void back_light_colour(int colour_num){
+  switch (colour_num){
     case 0:
-      LedOn(WHITE);
-      LedOff(RED);
+      LedOn(LCD_BLUE);
+      LedOn(LCD_GREEN);
+      LedOn(LCD_RED);
       break;
+  
     case 1:
-      LedOn(PURPLE);
-      LedOff(WHITE);
+      LedOff(LCD_BLUE);
+      LedOn(LCD_GREEN);
+      LedOn(LCD_RED);
       break;
+
     case 2:
-      LedOn(BLUE);
-      LedOff(PURPLE);
+      LedOn(LCD_BLUE);
+      LedOff(LCD_GREEN);
+      LedOn(LCD_RED);
       break;
+
     case 3:
-      LedOn(CYAN);
-      LedOff(BLUE);
+      LedOn(LCD_BLUE);
+      LedOn(LCD_GREEN);
+      LedOff(LCD_RED);
       break;
+
     case 4:
-      LedOn(GREEN);
-      LedOff(CYAN);
+      LedOff(LCD_BLUE);
+      LedOff(LCD_GREEN);
+      LedOn(LCD_RED);
       break;
+
     case 5:
-      LedOn(YELLOW);
-      LedOff(GREEN);
+      LedOff(LCD_BLUE);
+      LedOn(LCD_GREEN);
+      LedOff(LCD_RED);
       break;
+  
     case 6:
-      LedOn(ORANGE);
-      LedOff(YELLOW);
+      LedOn(LCD_BLUE);
+      LedOff(LCD_GREEN);
+      LedOff(LCD_RED);
       break;
+  
     case 7:
-      LedOn(RED);
-      LedOff(ORANGE);
+      LedOff(LCD_BLUE);
+      LedOff(LCD_GREEN);
+      LedOn(LCD_RED);
+      break;
+    
+    case 8:
+      LedOff(LCD_BLUE);
+      LedOff(LCD_GREEN);
+      LedOff(LCD_RED);
+      break;
+
+    default:
       break;
   }
 }
@@ -133,14 +190,7 @@ void UserApp1Initialize(void)
   {
     UserApp1_pfStateMachine = UserApp1SM_Idle;
     HEARTBEAT_OFF();
-    LedOff(WHITE);
-    LedOff(PURPLE);
-    LedOff(BLUE);
-    LedOff(CYAN);
-    LedOff(GREEN);
-    LedOff(YELLOW);
-    LedOff(ORANGE);
-    LedOff(RED);
+    led_all_on_off();
   }
   else
   {
@@ -188,7 +238,8 @@ static void UserApp1SM_Idle(void)
   static u16 u16Counter = U16_COUNTER_PERIOD_MS; //Time is initialized
 
   static bool bLightIsOn = FALSE;
-  static int led_number = 0;
+  static bool L2R = TRUE;
+  static int lcd_number = 0, led_number = 0;
 
   u16Counter--;
   
@@ -205,11 +256,36 @@ static void UserApp1SM_Idle(void)
       bLightIsOn = TRUE;
     }
 
-  if(led_number == 7)
-    led_number = 0;
+    if(led_number == 7){
+      switch_led_L2R(led_number);
+      L2R = FALSE;
+    }
+    
+    if(led_number == 0){
+      switch_led_R2L(led_number);
+      L2R = TRUE;
+    }
+    
+    if(L2R){
+      switch_led_L2R(led_number);
+      led_number++;
+    }
 
-  switch_led(led_number);
-  led_number++;
+    else{
+      switch_led_R2L(led_number);
+      led_number--;
+    } 
+
+    if(lcd_number<=8){
+        back_light_colour(lcd_number);
+        lcd_number++;
+    }
+  
+    else{
+      lcd_number = 0;
+      back_light_colour(lcd_number);
+      lcd_number++;
+    }
     
   }
   
