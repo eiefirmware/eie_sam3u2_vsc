@@ -172,6 +172,7 @@ static void UserApp1SM_Idle(void)
      static u8 u8Counter = 0;
      static u8 u8ColorIndex = 0;
      // Colors: Red, Yellow, Green, Cyan, Blue, Purple, White
+     // Consistent Color Blinking for multiple patterns
      static u8 aau8Color[7][3] = {{RED0, 0xff, 0xff}, 
                                  {RED0, GREEN0, 0xff}, 
                                  {0xff, GREEN0, 0xff},
@@ -247,6 +248,7 @@ static void UserApp1SM_Idle(void)
         }
      }
      /*
+     // Pattern for multicolor blinking
      LedOff(RED3);
      LedOff(GREEN2);
      LedOff(BLUE1);
