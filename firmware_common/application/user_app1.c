@@ -72,8 +72,15 @@ void switch_led_L2R(int number){
 }
 
 void switch_led_R2L(int number){
-  LedOn(number);
-  LedOff(number+1);
+  
+  if(number == 7){
+    LedOn(number);
+  }
+  
+  else{
+    LedOn(number);
+    LedOff(number+1);
+  }
 }
 
 void led_all_on_off(void){
@@ -238,7 +245,7 @@ static void UserApp1SM_Idle(void)
   static u16 u16Counter = U16_COUNTER_PERIOD_MS; //Time is initialized
 
   static bool bLightIsOn = FALSE;
-  static bool L2R = TRUE;
+  static bool L2R = TRUE, Change_led = TRUE;
   static int lcd_number = 0, led_number = 0;
 
   u16Counter--;
@@ -256,41 +263,86 @@ static void UserApp1SM_Idle(void)
       bLightIsOn = TRUE;
     }
 
-    if(led_number == 7){
-      switch_led_L2R(led_number);
-      L2R = FALSE;
-    }
-    
-    if(led_number == 0){
-      switch_led_R2L(led_number);
-      L2R = TRUE;
-    }
-    
-    if(L2R){
-      switch_led_L2R(led_number);
-      led_number++;
-    }
+    if(Change_led){
 
-    else{
-      switch_led_R2L(led_number);
-      led_number--;
-    } 
+      if(led_number == 7){
+        switch_led_L2R(led_number);
+        L2R = FALSE;
+      }
+    
+      if(led_number == 0){
+        switch_led_R2L(led_number);
+        L2R = TRUE;
+      }
+    
+      if(L2R){
+        switch_led_L2R(led_number);
+        led_number++;
+      }
+
+      else{
+        switch_led_R2L(led_number);
+        led_number--;
+      } 
+    }
+  }
+
+  if (WasButtonPressed(BUTTON0)){
+
+    ButtonAcknowledge(BUTTON0);
 
     if(lcd_number<=8){
-        back_light_colour(lcd_number);
-        lcd_number++;
-    }
-  
-    else{
-      lcd_number = 0;
       back_light_colour(lcd_number);
       lcd_number++;
     }
-    
+
+    else{
+      lcd_number=0;
+      back_light_colour(lcd_number);
+      lcd_number++;
+    }
   }
-  
- /* end UserApp1SM_Idle() */
+
+  if(WasButtonPressed(BUTTON1)){
+      
+    ButtonAcknowledge(BUTTON1);
+
+    if(Change_led){
+      Change_led = FALSE;
+      L2R = TRUE;
+      led_number = 0;
+      led_all_off();
+    }
+
+    else
+    Change_led = TRUE;
+  }
+    
+    /*
+    if(Change_led){
+      if(led_number == 7){
+        switch_led_L2R(led_number);
+        L2R = FALSE;
+      }
+    
+      if(led_number == 0){
+        switch_led_R2L(led_number);
+        L2R = TRUE;
+      }
+    
+      if(L2R){
+        switch_led_L2R(led_number);
+        led_number++;
+      }
+
+      else{
+        switch_led_R2L(led_number);
+        led_number--;
+      }
+    }*/
 }
+ /* end UserApp1SM_Idle() */
+
 
 /*------------------------------------------------------------------------------------------------------------------*/
 /* Handle an error */
