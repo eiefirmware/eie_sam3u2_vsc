@@ -145,12 +145,19 @@ static void UserApp1SM_Idle(void)
 {
   static u16 u16Counter = U16_COUNTER_PERIOD_MS; /* reminder that static variables retain their value even if a function goes
   out of scope. This is the answer to the question "how do we keep variables to retain their values even if a function exits?" */
-
+  static bool HeartbeatState = FALSE;
   // Decrement the above counter every 1ms until the counter reaches 0
   u16Counter--;
 
   if (u16Counter == 0) {
     u16Counter = U16_COUNTER_PERIOD_MS;
+    if (HeartbeatState == FALSE) {
+      HEARTBEAT_ON();
+      HeartbeatState = TRUE;
+    } else {
+      HEARTBEAT_OFF();
+      HeartbeatState = FALSE;
+    }
   }
 
 } /* end UserApp1SM_Idle() */
