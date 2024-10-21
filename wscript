@@ -443,8 +443,7 @@ def get_gcc_srch_path_win32():
 
     REGISTRY_PATHS = [(winreg.HKEY_LOCAL_MACHINE, "SOFTWARE\\WOW6432Node\\ARM")]
     INSTALL_PATHS = [
-        "C:\\Program Files (x86)\\Arm GNU Toolchain arm-none-eabi",
-        "D:\\Arm_GNU_Toolchain\\13_3_rel1\\arm-none-eabi",
+        "C:\\Program Files (x86)\\Arm GNU Toolchain arm-none-eabi\\13.3 rel1\\arm-none-eabi"
     ]
 
     gcc_vers = defaultdict(set)  # Map from version numbers to discovered paths.
