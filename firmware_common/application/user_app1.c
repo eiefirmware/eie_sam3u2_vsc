@@ -317,29 +317,6 @@ static void UserApp1SM_Idle(void)
     else
     Change_led = TRUE;
   }
-    
-    /*
-    if(Change_led){
-      if(led_number == 7){
-        switch_led_L2R(led_number);
-        L2R = FALSE;
-      }
-    
-      if(led_number == 0){
-        switch_led_R2L(led_number);
-        L2R = TRUE;
-      }
-    
-      if(L2R){
-        switch_led_L2R(led_number);
-        led_number++;
-      }
-
-      else{
-        switch_led_R2L(led_number);
-        led_number--;
-      }
-    }*/
 }
  /* end UserApp1SM_Idle() */
 
