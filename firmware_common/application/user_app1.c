@@ -92,6 +92,9 @@ Promises:
 */
 void UserApp1Initialize(void)
 {
+
+  HEARTBEAT_OFF();
+
   /* If good initialization, set state to Idle */
   if( 1 )
   {
@@ -140,7 +143,16 @@ State Machine Function Definitions
 /* What does this state do? */
 static void UserApp1SM_Idle(void)
 {
-     
+  static u16 u16Counter = U16_COUNTER_PERIOD_MS; /* reminder that static variables retain their value even if a function goes
+  out of scope. This is the answer to the question "how do we keep variables to retain their values even if a function exits?" */
+
+  // Decrement the above counter every 1ms until the counter reaches 0
+  u16Counter--;
+
+  if (u16Counter == 0) {
+    u16Counter = U16_COUNTER_PERIOD_MS;
+  }
+
 } /* end UserApp1SM_Idle() */
      
 
