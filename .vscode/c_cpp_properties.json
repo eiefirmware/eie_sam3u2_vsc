@@ -2,12 +2,15 @@
     "configurations": [
         {
             "name": "default",
-            "includePath": [],
+            "includePath": [
+                "C:\\msys64\\ucrt64\\include"
+            ],
             "defines": [],
             "cStandard": "c99",
             "intelliSenseMode": "gcc-arm",
             "compileCommands": "${workspaceFolder}/build/compile_commands.json",
-            "mergeConfigurations": true
+            "mergeConfigurations": true,
+            "compilerPath": "C:/msys64/ucrt64/bin/gcc.exe"
         }
     ],
     "version": 4
