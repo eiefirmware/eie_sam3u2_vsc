@@ -92,6 +92,12 @@ Promises:
 */
 void UserApp1Initialize(void)
 {
+  /* Make sure all LEDs and backlight are off to start */
+  for(u8 i = 0; i < U8_TOTAL_LEDS; i++)
+  {
+    LedOff( (LedNameType)i );
+  }
+
   /* If good initialization, set state to Idle */
   if( 1 )
   {
@@ -137,10 +143,75 @@ void UserApp1RunActiveState(void)
 State Machine Function Definitions
 **********************************************************************************************************************/
 /*-------------------------------------------------------------------------------------------------------------------*/
-/* What does this state do? */
+/* Button module exercises */
 static void UserApp1SM_Idle(void)
 {
-     
+  static bRed1Blink = FALSE;
+  static LedRateType aeBlinkRate[] = {LED_1HZ, LED_2HZ, LED_4HZ, LED_8HZ};
+  static u8 u8BlinkRateIndex = 0;
+
+  /* Turn on the LCD backlight if BUTTON0  has been held for 2 seconds */
+  if( IsButtonHeld(BUTTON0, 2000))
+  {
+    LedOn(LCD_BL);
+  }
+  else
+  {
+    LedOff(LCD_BL);
+  }
+
+  /* Start the RED1 LED blinking if BUTTON1 was pressed since last check.
+  Turn the RED1 LED off if it was already blinking. */
+  if( WasButtonPressed(BUTTON1) )
+  {
+    /* Don't forget to ACK the button press */
+    ButtonAcknowledge(BUTTON1);
+
+    /* If the LED isn't blinking, start the blink */
+    if(!bRed1Blink)
+    {
+      bRed1Blink = TRUE;
+      LedBlink(RED1, aeBlinkRate[u8BlinkRateIndex]);
+
+      /* Make sure there is no pending BUTTON0 press that would change the rate */
+      ButtonAcknowledge(BUTTON0);
+    }
+    /* Otherwise turn the blinking LED off */
+    else
+    {
+      bRed1Blink = FALSE;
+      LedOff(RED1);
+    }
+  }
+
+  /* Adjust blink rate if BUTTON0 was pressed and light is currently blinking */
+  if( WasButtonPressed(BUTTON0) && bRed1Blink)
+  {
+    /* Don't forget to ACK the button press */
+    ButtonAcknowledge(BUTTON0);
+
+    /* Adjust and roll the counter */
+    u8BlinkRateIndex++;
+    if(u8BlinkRateIndex == (sizeof(aeBlinkRate) / sizeof(LedRateType)))
+    {
+      u8BlinkRateIndex = 0;
+    }
+
+    /* Request the new blink rate */
+    LedBlink(RED1, aeBlinkRate[u8BlinkRateIndex]);
+  } /* end if(bRed1Blink) */
+
+
+ /* Left side blue LED segment on when BUTTON0 is pressed */
+  if( IsButtonPressed(BUTTON0) )
+  {
+    LedOn(BLUE0);
+  }
+  else
+  {
+    LedOff(BLUE0);
+  }    
+
 } /* end UserApp1SM_Idle() */
      
 
