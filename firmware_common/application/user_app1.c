@@ -169,7 +169,7 @@ static void UserApp1SM_Idle(void)
   }
  }
  if (IsButtonPressed(BUTTON0)){
-  LedOn(WHITE);
+  LedPWM(WHITE, LED_PWM_50);
  }
  else{
   LedOff(WHITE);
