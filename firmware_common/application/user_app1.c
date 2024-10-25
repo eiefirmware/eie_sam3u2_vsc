@@ -315,7 +315,7 @@ static void UserApp1SM_Idle(void)
     }
 
     else
-    Change_led = TRUE;
+      Change_led = TRUE;
   }
 }
  /* end UserApp1SM_Idle() */
