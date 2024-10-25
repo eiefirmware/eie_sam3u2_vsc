@@ -180,16 +180,19 @@ static void UserApp1SM_Idle(void)
   if (bool_yellowled_blinking){
     bool_yellowled_blinking = FALSE;
     LedOff(YELLOW);
+    LedOn(BLUE);
   }
   else{
     bool_yellowled_blinking = TRUE;
     LedBlink(YELLOW, LED_1HZ);
+    LedOff(BLUE);
   }
  }
  if (IsButtonHeld(BUTTON3, 2000)){
   LedOn(CYAN);
  }
- LedOff(CYAN);
+ else
+  LedOff(CYAN);
 }
 /* end UserApp1SM_Idle() */
      
