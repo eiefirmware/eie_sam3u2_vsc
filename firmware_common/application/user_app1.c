@@ -186,6 +186,10 @@ static void UserApp1SM_Idle(void)
     LedBlink(YELLOW, LED_1HZ);
   }
  }
+ while (IsButtonHeld(BUTTON3, 2)){
+  LedOn(CYAN);
+ }
+ LedOff(CYAN);
 }
 /* end UserApp1SM_Idle() */
      
