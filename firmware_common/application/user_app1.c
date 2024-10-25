@@ -156,7 +156,7 @@ static void UserApp1SM_Idle(void)
  static u16 u16_heartbeat_counter = U16_COUNTER_PERIOD_MS;
  static int turn_light = 0;
  static u8 u8_password[10] = {0, 1, 2}, u8_inputted_password[10];
- static u8 u8_passwordindex;
+ static u8 u8_passwordindex = 0;
  bool bool_correct_password = TRUE;
 
  u16_heartbeat_counter -= 1;
