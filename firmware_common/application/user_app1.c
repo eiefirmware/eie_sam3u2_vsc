@@ -99,7 +99,7 @@ void UserApp1Initialize(void)
   LedOff(GREEN);
   LedOff(YELLOW);
   LedOff(ORANGE);
-  LedOff(RED);
+  LedOn(RED);
 
   LedOff(LCD_RED);
   LedOff(LCD_GREEN);
@@ -155,9 +155,9 @@ static void UserApp1SM_Idle(void)
 {
  static u16 u16_heartbeat_counter = U16_COUNTER_PERIOD_MS;
  static int turn_light = 0;
- bool bool_yellowled_blinking = FALSE;
- static u8 led_blinkrate = 0;
- static u8 potential_blinkrates[] = {LED_1HZ, LED_2HZ, LED_4HZ, LED_8HZ};
+ static u8 u8_password[10] = {}, u8_inputted_password[10];
+ static u8 u8_passwordindex;
+ bool bool_correct_password = TRUE;
 
  u16_heartbeat_counter -= 1;
  if (u16_heartbeat_counter == 0) { 
@@ -172,44 +172,31 @@ static void UserApp1SM_Idle(void)
   }
  }
  if (IsButtonPressed(BUTTON0)){
-  LedOn(WHITE);
- }
- else{
-  LedOff(WHITE);
+  u8_inputted_password[u8_passwordindex] = 0;
+  u8_passwordindex++;
  }
  if (IsButtonPressed(BUTTON1)){
-  LedOn(BLUE);
- }
- else{
-  LedOff(BLUE);
+  u8_inputted_password[u8_passwordindex] = 1;
+  u8_passwordindex++;
  }
  if (IsButtonPressed(BUTTON2)){
-  LedOn(PURPLE);
- }
- else{
-  LedOff(PURPLE);
+  u8_inputted_password[u8_passwordindex] = 2;
+  u8_passwordindex++;
  }
 
- if (WasButtonPressed(BUTTON1)){
-  ButtonAcknowledge(BUTTON1);
-  if (bool_yellowled_blinking){
-    bool_yellowled_blinking = FALSE;
-    LedOff(YELLOW);
+ if (IsButtonPressed(BUTTON3)){
+  int i;
+  for (i = 0; i < u8_passwordindex; i++){
+    if (u8_password[i] != u8_inputted_password[i]){
+      bool_correct_password = FALSE;
+      break;
+    }
   }
-  else{
-    LedOff(YELLOW);
-    bool_yellowled_blinking = TRUE;
-    LedBlink(YELLOW, potential_blinkrates[led_blinkrate]);
-    led_blinkrate++;
-    if (led_blinkrate == 4)
-      led_blinkrate = 0;
-  }
+  if (bool_correct_password)
+    LedBlink(GREEN, LED_8HZ);
+  else
+    LedBlink(RED, LED_8HZ);
  }
- if (IsButtonHeld(BUTTON3, 2000)){
-  LedOn(CYAN);
- }
- else
-  LedOff(CYAN);
 }
 /* end UserApp1SM_Idle() */
      
