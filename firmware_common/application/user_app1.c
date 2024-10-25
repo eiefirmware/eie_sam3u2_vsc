@@ -171,20 +171,24 @@ static void UserApp1SM_Idle(void)
     turn_light = 0;
   }
  }
- if (IsButtonPressed(BUTTON0)){
+
+ if (WasButtonPressed(BUTTON0)){
   u8_inputted_password[u8_passwordindex] = 0;
   u8_passwordindex++;
+  ButtonAcknowledge(BUTTON0);
  }
- if (IsButtonPressed(BUTTON1)){
+ if (WasButtonPressed(BUTTON1)){
   u8_inputted_password[u8_passwordindex] = 1;
   u8_passwordindex++;
+  ButtonAcknowledge(BUTTON1);
  }
- if (IsButtonPressed(BUTTON2)){
+ if (WasButtonPressed(BUTTON2)){
   u8_inputted_password[u8_passwordindex] = 2;
   u8_passwordindex++;
+  ButtonAcknowledge(BUTTON2);
  }
 
- if (IsButtonPressed(BUTTON3)){
+ if (WasButtonPressed(BUTTON3)){
   int i;
   for (i = 0; i < u8_passwordindex; i++){
     if (u8_password[i] != u8_inputted_password[i]){
@@ -196,6 +200,7 @@ static void UserApp1SM_Idle(void)
     LedBlink(GREEN, LED_8HZ);
   else
     LedBlink(RED, LED_8HZ);
+  ButtonAcknowledge(BUTTON3);
  }
 }
 /* end UserApp1SM_Idle() */
