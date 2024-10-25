@@ -66,106 +66,6 @@ static fnCode_type UserApp1_pfStateMachine;               /*!< @brief The state 
 /**********************************************************************************************************************
 Function Definitions
 **********************************************************************************************************************/
-void switch_led_L2R(int number){
-  LedOn(number);
-  LedOff(number-1);
-}
-
-void switch_led_R2L(int number){
-  
-  if(number == 7){
-    LedOn(number);
-  }
-  
-  else{
-    LedOn(number);
-    LedOff(number+1);
-  }
-}
-
-void led_all_on_off(void){
-  int led;
-
-  for(led = 0; led <= 7; led++)
-    LedOn(led);
-
-  for(led = 7; led >= 0; led--)
-    LedOff(led);
-}
-
-void led_all_on(void){
-  int led;
-  for(led=0;led<=7;led++)
-    LedOn(led);
-}
-
-void led_all_off(void){
-  int led;
-  for(led=7;led>=0;led--){
-    LedOff(led);
-  }
-}
-
-void back_light_colour(int colour_num){
-  switch (colour_num){
-    case 0:
-      LedOn(LCD_BLUE);
-      LedOn(LCD_GREEN);
-      LedOn(LCD_RED);
-      break;
-  
-    case 1:
-      LedOff(LCD_BLUE);
-      LedOn(LCD_GREEN);
-      LedOn(LCD_RED);
-      break;
-
-    case 2:
-      LedOn(LCD_BLUE);
-      LedOff(LCD_GREEN);
-      LedOn(LCD_RED);
-      break;
-
-    case 3:
-      LedOn(LCD_BLUE);
-      LedOn(LCD_GREEN);
-      LedOff(LCD_RED);
-      break;
-
-    case 4:
-      LedOff(LCD_BLUE);
-      LedOff(LCD_GREEN);
-      LedOn(LCD_RED);
-      break;
-
-    case 5:
-      LedOff(LCD_BLUE);
-      LedOn(LCD_GREEN);
-      LedOff(LCD_RED);
-      break;
-  
-    case 6:
-      LedOn(LCD_BLUE);
-      LedOff(LCD_GREEN);
-      LedOff(LCD_RED);
-      break;
-  
-    case 7:
-      LedOff(LCD_BLUE);
-      LedOff(LCD_GREEN);
-      LedOn(LCD_RED);
-      break;
-    
-    case 8:
-      LedOff(LCD_BLUE);
-      LedOff(LCD_GREEN);
-      LedOff(LCD_RED);
-      break;
-
-    default:
-      break;
-  }
-}
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /*! @publicsection */                                                                                            
@@ -242,20 +142,10 @@ State Machine Function Definitions
 /* What does this state do? */
 static void UserApp1SM_Idle(void)
 {
-  static int rate = 1;
+  static int passcode[11];
 
-  if(WasButtonPressed(BUTTON0)){
-    ButtonAcknowledge(BUTTON0);
+  while(!(WasButtonPressed(BUTTON3))){
 
-      if(rate == 4){
-        rate = 0;
-        LedOff(YELLOW);
-      }
-
-      else{
-        rate++;
-        LedBlink(YELLOW,500/rate);
-      }
   }
 } 
  /* end UserApp1SM_Idle() */
