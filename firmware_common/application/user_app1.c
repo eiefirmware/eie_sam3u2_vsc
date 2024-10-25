@@ -197,6 +197,7 @@ static void UserApp1SM_Idle(void)
     LedOff(YELLOW);
   }
   else{
+    LedOff(YELLOW);
     bool_yellowled_blinking = TRUE;
     LedBlink(YELLOW, potential_blinkrates[led_blinkrate]);
     led_blinkrate++;
