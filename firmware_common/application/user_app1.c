@@ -242,6 +242,23 @@ State Machine Function Definitions
 /* What does this state do? */
 static void UserApp1SM_Idle(void)
 {
+  static int rate = 1;
+
+  if(WasButtonPressed(BUTTON0)){
+    ButtonAcknowledge(BUTTON0);
+
+      if(rate == 4){
+        rate = 0;
+        LedOff(YELLOW);
+      }
+
+      else{
+        rate++;
+        LedBlink(YELLOW,500/rate);
+      }
+  }
+
+  /*
   static u16 u16Counter = U16_COUNTER_PERIOD_MS; //Time is initialized
 
   static bool bLightIsOn = FALSE;
@@ -316,8 +333,8 @@ static void UserApp1SM_Idle(void)
 
     else
       Change_led = TRUE;
-  }
-}
+  } */
+} 
  /* end UserApp1SM_Idle() */
 
 
