@@ -155,6 +155,7 @@ static void UserApp1SM_Idle(void)
 {
  static u16 u16_heartbeat_counter = U16_COUNTER_PERIOD_MS;
  static int turn_light = 0;
+ bool bool_yellowled_blinking = FALSE;
 
  u16_heartbeat_counter -= 1;
  if (u16_heartbeat_counter == 0) { 
@@ -169,10 +170,21 @@ static void UserApp1SM_Idle(void)
   }
  }
  if (IsButtonPressed(BUTTON0)){
-  LedPWM(WHITE, LED_PWM_50);
+  LedOn(WHITE);
  }
  else{
   LedOff(WHITE);
+ }
+ if (WasButtonPressed(BUTTON1)){
+  ButtonAcknowledge(BUTTON1);
+  if (bool_yellowled_blinking){
+    bool_yellowled_blinking = FALSE;
+    LedOff(YELLOW);
+  }
+  else{
+    bool_yellowled_blinking = TRUE;
+    LedBlink(YELLOW, LED_1HZ);
+  }
  }
 }
 /* end UserApp1SM_Idle() */
