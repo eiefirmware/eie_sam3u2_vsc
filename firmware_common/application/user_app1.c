@@ -97,7 +97,6 @@ void UserApp1Initialize(void)
   {
     UserApp1_pfStateMachine = UserApp1SM_Idle;
     HEARTBEAT_OFF();
-    led_all_on_off();
   }
   else
   {
@@ -142,11 +141,7 @@ State Machine Function Definitions
 /* What does this state do? */
 static void UserApp1SM_Idle(void)
 {
-  static int passcode[11];
 
-  while(!(WasButtonPressed(BUTTON3))){
-
-  }
 } 
  /* end UserApp1SM_Idle() */
 
