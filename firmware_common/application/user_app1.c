@@ -175,17 +175,28 @@ static void UserApp1SM_Idle(void)
  else{
   LedOff(WHITE);
  }
+ if (IsButtonPressed(BUTTON1)){
+  LedOn(BLUE);
+ }
+ else{
+  LedOff(BLUE);
+ }
+ if (IsButtonPressed(BUTTON2)){
+  LedOn(PURPLE);
+ }
+ else{
+  LedOff(PURPLE);
+ }
+ 
  if (WasButtonPressed(BUTTON1)){
   ButtonAcknowledge(BUTTON1);
   if (bool_yellowled_blinking){
     bool_yellowled_blinking = FALSE;
     LedOff(YELLOW);
-    LedOn(BLUE);
   }
   else{
     bool_yellowled_blinking = TRUE;
     LedBlink(YELLOW, LED_1HZ);
-    LedOff(BLUE);
   }
  }
  if (IsButtonHeld(BUTTON3, 2000)){
