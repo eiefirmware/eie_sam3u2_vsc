@@ -92,6 +92,12 @@ Promises:
 */
 void UserApp1Initialize(void)
 {
+  // Make sure all LEDs and backlight are off to start
+  for(u8 i = 0; i < U8_TOTAL_LEDS; i++)
+  {
+    LedOff((LedNameType)i);
+  }
+
   /* If good initialization, set state to Idle */
   if( 1 )
   {
@@ -137,10 +143,145 @@ void UserApp1RunActiveState(void)
 State Machine Function Definitions
 **********************************************************************************************************************/
 /*-------------------------------------------------------------------------------------------------------------------*/
-/* What does this state do? */
+/* Button module exercises */
 static void UserApp1SM_Idle(void)
 {
-     
+     /*
+     static bRed1Blink = FALSE;
+     static LedRateType aeBLinkRate[] = {LED_1HZ, LED_2HZ, LED_4HZ, LED_8HZ};
+     static u8 u8BlinkRateIndex = 0;
+     */
+     static yellow3On = TRUE;
+     static u8 password[] = {0,0,0,0,0,0,0,0,0,0};
+     const u8 correctPassword[] = {1,2,1,2,1,2,1,2,1,2};
+     static correct = FALSE;
+     static wrong = TRUE;
+     static u16 hold = 0;
+     static u8 buttonPressed = 0;
+     if(yellow3On)
+     {
+      LedOn(GREEN3);
+      LedOn(BLUE3);
+     } 
+     if(IsButtonHeld(BUTTON0, 2000) && IsButtonHeld(BUTTON1, 2000))
+     {
+      for (u8 i = 0; i< (sizeof(password)/sizeof(u8)); i++)
+      {
+        if(password[i] == correctPassword[i])
+        {
+          correct = FALSE;
+          break;
+        }
+        else
+        {
+          correct = TRUE;
+        }
+      }
+      if(correct == TRUE)
+      {
+
+      }
+     }
+     if(correct == FALSE && wrong == TRUE)
+      {
+        LedOff(GREEN3);
+        LedOff(BLUE3);
+        yellow3On = FALSE;
+        LedBlink(RED3, LED_2HZ);
+        if (hold > 2000)
+        {
+          LedOff(RED3);
+          wrong = FALSE;
+          hold = 0;
+          yellow3On = TRUE;
+        }
+      }
+      else if (correct == TRUE && wrong == FALSE)
+      {
+        LedOff(GREEN3);
+        LedOff(BLUE3);
+        yellow3On = FALSE;
+        LedBlink(GREEN3, LED_2HZ);
+      }
+      if(WasButtonPressed(BUTTON0))
+      {
+        ButtonAcknowledge(BUTTON0);
+        if(buttonPressed < 10)
+        {
+          password[buttonPressed] = 1;
+          buttonPressed++;
+        }
+        if(buttonPressed >= 10)
+        {
+          buttonPressed = 0;
+        }
+      }
+      if(WasButtonPressed(BUTTON1))
+      {
+        ButtonAcknowledge(BUTTON1);
+        if(buttonPressed < 10)
+        {
+          password[buttonPressed] = 2;
+          buttonPressed++;
+        }
+        if(buttonPressed >= 10)
+        {
+          buttonPressed = 0;
+        }
+      }
+     /*
+     // Turn on the LCD backlight if BUTTON0 has been held for 2 seconds
+     if(IsButtonHeld(BUTTON0, 2000))
+     {
+      LedOn(LCD_BL);
+     }
+     else
+     {
+      LedOff(LCD_BL);
+     }
+     // Start the RED1 LED blinking if BUTTON1 was pressed since last check.
+     // Turn the RED1 LED off if it was already blinking.
+     if(WasButtonPressed(BUTTON1))
+     {
+      // Don't forget to ACK the button press
+      ButtonAcknowledge(BUTTON1);
+      
+      // If the LED isn't blinking, start the blink
+      if(!bRed1Blink)
+      {
+        bRed1Blink = TRUE;
+        LedBlink(RED1, aeBLinkRate[u8BlinkRateIndex]);
+        // Make sure there is no pending BUTTON0 press that would change the rate
+        ButtonAcknowledge(BUTTON0);
+      }
+      else
+      {
+        bRed1Blink = FALSE;
+        LedOff(RED1);
+      }
+    }
+    if(WasButtonPressed(BUTTON0) && bRed1Blink)
+    {
+      //Don't forget to ACK the button press
+      ButtonAcknowledge(BUTTON0);
+
+      //Adust and roll the counter
+      u8BlinkRateIndex++;
+      if(u8BlinkRateIndex == 4)
+      {
+        u8BlinkRateIndex = 0;
+      }
+      LedBlink(RED1, aeBLinkRate[u8BlinkRateIndex]);
+    }
+     if(IsButtonPressed(BUTTON0))
+     {
+      LedOn(BLUE0);
+     }
+     else
+     {
+      LedOff(BLUE0);
+     }
+     */
 } /* end UserApp1SM_Idle() */
      
 
