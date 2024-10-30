@@ -66,7 +66,17 @@ static fnCode_type UserApp1_pfStateMachine;               /*!< @brief The state 
 /**********************************************************************************************************************
 Function Definitions
 **********************************************************************************************************************/
+int any_button_pressed(void){
+  int i;
+  
+  if(IsButtonPressed(BUTTON0)||IsButtonPressed(BUTTON1)
+    ||IsButtonPressed(BUTTON2)||IsButtonPressed(BUTTON3))
+    return 1;
+  
+  else
+    return 0;
 
+}
 /*--------------------------------------------------------------------------------------------------------------------*/
 /*! @publicsection */                                                                                            
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -97,6 +107,12 @@ void UserApp1Initialize(void)
   {
     UserApp1_pfStateMachine = UserApp1SM_Idle;
     HEARTBEAT_OFF();
+    LcdCommand(LCD_CLEAR_CMD);
+    LcdMessage(LINE1_START_ADDR, "BUTTON LOCATIONS");
+    LcdMessage(LINE2_START_ADDR, "0");
+    LcdMessage(LINE2_START_ADDR+6,"1");
+    LcdMessage(LINE2_START_ADDR+13,"2");
+    LcdMessage(LINE2_END_ADDR,"3");
   }
   else
   {
@@ -141,6 +157,32 @@ State Machine Function Definitions
 /* What does this state do? */
 static void UserApp1SM_Idle(void)
 {
+    if(WasButtonPressed(BUTTON0)){
+    ButtonAcknowledge(BUTTON0);
+    PWMAudioSetFrequency(BUZZER1,262);
+  }
+
+  if(WasButtonPressed(BUTTON1)){
+    ButtonAcknowledge(BUTTON1);
+    PWMAudioSetFrequency(BUZZER2,294);
+  }
+
+  if(WasButtonPressed(BUTTON2)){
+    ButtonAcknowledge(BUTTON2);
+    PWMAudioSetFrequency(BUZZER2,330);
+  }
+
+  if(WasButtonPressed(BUTTON3)){
+    ButtonAcknowledge(BUTTON3);
+    PWMAudioSetFrequency(BUZZER2,392);
+  }
+
+  if(any_button_pressed())
+    PWMAudioOn(BUZZER1);
+  
+
+  else 
+    PWMAudioOff(BUZZER1);
 
 } 
  /* end UserApp1SM_Idle() */
