@@ -99,7 +99,7 @@ void UserApp1Initialize(void)
   LedOff(GREEN);
   LedOff(YELLOW);
   LedOff(ORANGE);
-  LedOn(RED);
+  LedOff(RED);
 
   LedOff(LCD_RED);
   LedOff(LCD_GREEN);
