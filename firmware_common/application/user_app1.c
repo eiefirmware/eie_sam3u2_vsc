@@ -171,36 +171,13 @@ static void UserApp1SM_Idle(void)
     turn_light = 0;
   }
  }
-
+ PWMAudioSetFrequency(BUZZER1, 500);
  if (WasButtonPressed(BUTTON0)){
-  u8_inputted_password[u8_passwordindex] = 0;
-  u8_passwordindex++;
   ButtonAcknowledge(BUTTON0);
+  PWMAudioOn(BUZZER1);
  }
- if (WasButtonPressed(BUTTON1)){
-  u8_inputted_password[u8_passwordindex] = 1;
-  u8_passwordindex++;
-  ButtonAcknowledge(BUTTON1);
- }
- if (WasButtonPressed(BUTTON2)){
-  u8_inputted_password[u8_passwordindex] = 2;
-  u8_passwordindex++;
-  ButtonAcknowledge(BUTTON2);
- }
-
- if (WasButtonPressed(BUTTON3)){
-  int i;
-  for (i = 0; i < u8_passwordindex; i++){
-    if (u8_password[i] != u8_inputted_password[i]){
-      bool_correct_password = FALSE;
-      break;
-    }
-  }
-  if (bool_correct_password)
-    LedBlink(GREEN, LED_8HZ);
-  else
-    LedBlink(RED, LED_8HZ);
-  ButtonAcknowledge(BUTTON3);
+ else {
+  PWMAudioOff(BUZZER1);
  }
 }
 /* end UserApp1SM_Idle() */
