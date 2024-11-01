@@ -172,8 +172,7 @@ static void UserApp1SM_Idle(void)
   }
  }
  PWMAudioSetFrequency(BUZZER1, 500);
- if (WasButtonPressed(BUTTON0)){
-  ButtonAcknowledge(BUTTON0);
+ if (IsButtonPressed(BUTTON0)){
   PWMAudioOn(BUZZER1);
  }
  else {
