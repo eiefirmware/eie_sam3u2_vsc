@@ -185,7 +185,7 @@ static void UserApp1SM_Idle(void)
   ButtonAcknowledge(BUTTON3);
  }
 
- if (IsButtonPressed(BUTTON0)){
+ if (IsButtonPressed(BUTTON0) || IsButtonPressed(BUTTON1) || IsButtonPressed(BUTTON2) || IsButtonPressed(BUTTON3)) {
   PWMAudioOn(BUZZER1);
  }
  else {
