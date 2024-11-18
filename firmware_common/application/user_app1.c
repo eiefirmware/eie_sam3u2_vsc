@@ -161,7 +161,7 @@ static void UserApp1SM_Idle(void)
  }
 
  static u8 u8NumCharsMessage[] = "\n\rCharacters in buffer: ";
- static u8 u8BufferMessage[] = "\n\rBuffer contents:\n";
+ static u8 u8BufferMessage[] = "\n\rBuffer contents:\n\r";
  u8 u8CharCount;
  if (WasButtonPressed(BUTTON0)){
   ButtonAcknowledge(BUTTON0);
