@@ -61,6 +61,7 @@ Variable names shall start with "UserApp1_<type>" and be declared as static.
 ***********************************************************************************************************************/
 static fnCode_type UserApp1_pfStateMachine;               /*!< @brief The state machine function pointer */
 #define U16_COUNTER_PERIOD_MS (u16)500;
+static u8 au8UserInputBuffer[USER1_INPUT_BUFFER_SIZE];
 //static u32 UserApp1_u32Timeout;                           /*!< @brief Timeout counter used across states */
 
 
@@ -93,19 +94,8 @@ Promises:
 */
 void UserApp1Initialize(void)
 {
-  u8 u8String[] = "A string to print the returns cursor to start of next line.\n\r";
-  u8 u8String2[] = "Here's a number: ";
-  u8 u8String3[] = " The 'cursor' was here.";
-  u32 u32Number = 1234567;
-
-  DebugPrintf(u8String);
-  DebugPrintf(u8String2);
-  DebugPrintNumber(u32Number);
-  DebugPrintf(u8String3);
-  DebugLineFeed();
-  DebugPrintf(u8String3);
-  DebugLineFeed();
-
+  for (int i = 0; i < USER1_INPUT_BUFFER_SIZE; i++)
+    au8UserInputBuffer[i] = 0;
   /* If good initialization, set state to Idle */
   if( 1 )
   {
@@ -171,12 +161,19 @@ static void UserApp1SM_Idle(void)
  }
 
  static u8 u8NumCharsMessage[] = "\n\rCharacters in buffer: ";
+ static u8 u8BufferMessage[] = "\n\rBuffer contents:";
+ u8 u8CharCount;
  if (WasButtonPressed(BUTTON0)){
   ButtonAcknowledge(BUTTON0);
 
   DebugPrintf(u8NumCharsMessage);
   DebugPrintNumber(G_u8DebugScanfCharCount);
   DebugLineFeed();
+ }
+ if (WasButtonPressed(BUTTON1)){
+  ButtonAcknowledge(BUTTON1);
+
+  u8CharCount = DebugScanf(au8UserInputBuffer);
  }
  }
 /* end UserApp1SM_Idle() */
