@@ -92,18 +92,18 @@ Promises:
 */
 void UserApp1Initialize(void)
 {
-  LedOff(WHITE); //setting up the initial states
-  LedOff(PURPLE);
-  LedOff(BLUE);
-  LedOff(CYAN);
-  LedOff(GREEN);
-  LedOff(YELLOW);
-  LedOff(ORANGE);
-  LedOff(RED);
+  u8 u8String[] = "A string to print the returns cursor to start of next line.\n\r";
+  u8 u8String2[] = "Here's a number: ";
+  u8 u8String3[] = " The 'cursor' was here.";
+  u32 u32Number = 1234567;
 
-  LedOff(LCD_RED);
-  LedOff(LCD_GREEN);
-  LedOff(LCD_BLUE);
+  DebugPrintf(u8String);
+  DebugPrintf(u8String2);
+  DebugPrintNumber(u32Number);
+  DebugPrintf(u8String3);
+  DebugLineFeed();
+  DebugPrintf(u8String3);
+  DebugLineFeed();
 
   /* If good initialization, set state to Idle */
   if( 1 )
@@ -168,30 +168,7 @@ static void UserApp1SM_Idle(void)
     turn_light = 0;
   }
  }
- PWMAudioSetFrequency(BUZZER1, 500);
-
- if (WasButtonPressed(BUTTON1)) {
-  PWMAudioSetFrequency(BUZZER1, 294);
-  ButtonAcknowledge(BUTTON1);
  }
-
- if (WasButtonPressed(BUTTON2)) {
-  PWMAudioSetFrequency(BUZZER1, 330);
-  ButtonAcknowledge(BUTTON2);
- }
-
- if (WasButtonPressed(BUTTON3)) {
-  PWMAudioSetFrequency(BUZZER1, 392);
-  ButtonAcknowledge(BUTTON3);
- }
-
- if (IsButtonPressed(BUTTON0) || IsButtonPressed(BUTTON1) || IsButtonPressed(BUTTON2) || IsButtonPressed(BUTTON3)) {
-  PWMAudioOn(BUZZER1);
- }
- else {
-  PWMAudioOff(BUZZER1);
- }
-}
 /* end UserApp1SM_Idle() */
      
 
