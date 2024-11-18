@@ -174,6 +174,7 @@ static void UserApp1SM_Idle(void)
   ButtonAcknowledge(BUTTON1);
 
   u8CharCount = DebugScanf(au8UserInputBuffer);
+  au8UserInputBuffer[u8CharCount] = '\0';
   DebugPrintf(u8BufferMessage);
   DebugPrintf(au8UserInputBuffer);
   DebugLineFeed();
