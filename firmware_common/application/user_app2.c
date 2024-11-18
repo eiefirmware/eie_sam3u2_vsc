@@ -124,7 +124,7 @@ Promises:
 void UserApp2RunActiveState(void)
 {
   UserApp2_pfStateMachine();
-
+  for (u32 i = 0; i < 50000; i++);
 } /* end UserApp2RunActiveState */
 
 
