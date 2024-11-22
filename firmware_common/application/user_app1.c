@@ -94,6 +94,9 @@ Promises:
 */
 void UserApp1Initialize(void)
 {
+  for (int i = 0; i < USER1_INPUT_BUFFER_SIZE; i++){
+    u8CharsinBuffer[i] = 0;
+  }
   /* If good initialization, set state to Idle */
   if( 1 )
   {
@@ -166,10 +169,10 @@ static void UserApp1SM_Idle(void)
     DebugLineFeed();
   } 
   if (WasButtonPressed(BUTTON1)){
-    u8 NumChars;
+    u8 u8NumChars;
     ButtonAcknowledge(BUTTON1);
-    NumChars = DebugScanf(u8CharsinBuffer);
-    u8CharsinBuffer[NumChars] = '\0';
+    u8NumChars = DebugScanf(u8CharsinBuffer);
+    u8CharsinBuffer[u8NumChars] = '\0';
     DebugPrintf(u8CharsinBuffer);
     DebugLineFeed();
   }
