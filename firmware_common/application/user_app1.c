@@ -95,6 +95,7 @@ Promises:
 */
 void UserApp1Initialize(void)
 {
+  DebugSetPassthrough();
   for (int i = 0; i < USER1_INPUT_BUFFER_SIZE; i++){
     u8CharsinBuffer[i] = 0;
   }
@@ -146,7 +147,6 @@ State Machine Function Definitions
 /* What does this state do? */
 static void UserApp1SM_Idle(void)
 {
-  DebugSetPassthrough();
   static u16 u16_heartbeat_counter = U16_COUNTER_PERIOD_MS;
   static int turn_light = 0;
 
