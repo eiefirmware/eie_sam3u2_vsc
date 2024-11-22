@@ -144,27 +144,28 @@ State Machine Function Definitions
 /* What does this state do? */
 static void UserApp1SM_Idle(void)
 {
- static u16 u16_heartbeat_counter = U16_COUNTER_PERIOD_MS;
- static int turn_light = 0;
+  static u16 u16_heartbeat_counter = U16_COUNTER_PERIOD_MS;
+  static int turn_light = 0;
 
- u16_heartbeat_counter -= 1;
- if (u16_heartbeat_counter == 0) { 
-  u16_heartbeat_counter = U16_COUNTER_PERIOD_MS;
-  if (turn_light == 0){
-    HEARTBEAT_OFF();
-    turn_light = 1;
+  u16_heartbeat_counter -= 1;
+  if (u16_heartbeat_counter == 0) { 
+    u16_heartbeat_counter = U16_COUNTER_PERIOD_MS;
+    if (turn_light == 0){
+      HEARTBEAT_OFF();
+      turn_light = 1;
+    }
+    else {
+      HEARTBEAT_ON();
+      turn_light = 0;
+    }
   }
-  else{
-    HEARTBEAT_ON();
-    turn_light = 0;
-  }
- }
  u8 u8NumCharactersinBuffer[] = "\n\rThis is how many characters are in the buffer:";
 
- if (WasButtonPressed(BUTTON0)) {
+ if (WasButtonPressed(BUTTON0)){
+
     DebugPrintf(u8NumCharactersinBuffer);
     DebugPrintNumber(G_u8DebugScanfCharCount);
-    DebugLineFeed;
+    DebugLineFeed();
  }
  }
 /* end UserApp1SM_Idle() */
