@@ -47,6 +47,7 @@ Includes
 /* Common header files */
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #include "AT91SAM3U4.h"
 #include "exceptions.h"
 #include "interrupts.h"
