@@ -61,7 +61,7 @@ Variable names shall start with "UserApp1_<type>" and be declared as static.
 ***********************************************************************************************************************/
 static fnCode_type UserApp1_pfStateMachine;               /*!< @brief The state machine function pointer */
 #define U16_COUNTER_PERIOD_MS (u16)500;
-static u8 au8UserInputBuffer[USER1_INPUT_BUFFER_SIZE];
+static u8 u8CharsinBuffer[USER1_INPUT_BUFFER_SIZE];
 //static u32 UserApp1_u32Timeout;                           /*!< @brief Timeout counter used across states */
 
 
@@ -94,8 +94,6 @@ Promises:
 */
 void UserApp1Initialize(void)
 {
-  for (int i = 0; i < USER1_INPUT_BUFFER_SIZE; i++)
-    au8UserInputBuffer[i] = 0;
   /* If good initialization, set state to Idle */
   if( 1 )
   {
@@ -167,6 +165,12 @@ static void UserApp1SM_Idle(void)
     DebugPrintNumber(G_u8DebugScanfCharCount);
     DebugLineFeed();
   } 
+  if (WasButtonPressed(BUTTON1)){
+    ButtonAcknowledge(BUTTON1);
+    DebugScanf(u8CharsinBuffer);
+    DebugPrintf(u8CharsinBuffer);
+    DebugLineFeed();
+  }
  }
 /* end UserApp1SM_Idle() */
      
