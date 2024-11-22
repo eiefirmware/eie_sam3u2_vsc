@@ -38,6 +38,7 @@ PROTECTED FUNCTIONS
 **********************************************************************************************************************/
 
 #include "configuration.h"
+#include "string.h"
 
 /***********************************************************************************************************************
 Global variable definitions with scope across entire project.
@@ -145,6 +146,7 @@ State Machine Function Definitions
 /* What does this state do? */
 static void UserApp1SM_Idle(void)
 {
+  DebugSetPassthrough();
   static u16 u16_heartbeat_counter = U16_COUNTER_PERIOD_MS;
   static int turn_light = 0;
 
@@ -161,8 +163,10 @@ static void UserApp1SM_Idle(void)
     }
   }
   u8 u8NumCharactersinBuffer[] = "\n\rThis is how many characters are in the buffer: ";
+  char charName[] = "Daniel";
+  u8 u8NumNameTyped = 0;
 
-  if (WasButtonPressed(BUTTON0)){
+    if (WasButtonPressed(BUTTON0)){
     ButtonAcknowledge(BUTTON0);
     DebugPrintf(u8NumCharactersinBuffer);
     DebugPrintNumber(G_u8DebugScanfCharCount);
@@ -176,7 +180,14 @@ static void UserApp1SM_Idle(void)
     DebugPrintf(u8CharsinBuffer);
     DebugLineFeed();
   }
- }
+  if (WasButtonPressed(BUTTON2)) {
+    ButtonAcknowledge(BUTTON2);
+    if (strstr(G_au8DebugScanfBuffer, charName)) {
+      u8NumNameTyped++;
+      DebugPrintNumber(u8NumNameTyped);
+    }
+  }
+  }
 /* end UserApp1SM_Idle() */
      
 
