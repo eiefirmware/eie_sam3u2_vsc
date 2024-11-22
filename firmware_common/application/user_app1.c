@@ -166,8 +166,10 @@ static void UserApp1SM_Idle(void)
     DebugLineFeed();
   } 
   if (WasButtonPressed(BUTTON1)){
+    u8 NumChars;
     ButtonAcknowledge(BUTTON1);
-    DebugScanf(u8CharsinBuffer);
+    NumChars = DebugScanf(u8CharsinBuffer);
+    u8CharsinBuffer[NumChars] = '\0';
     DebugPrintf(u8CharsinBuffer);
     DebugLineFeed();
   }
