@@ -94,8 +94,6 @@ Promises:
 */
 void UserApp1Initialize(void)
 {
-  static u8 u8Buffer[] = "";
-  DebugScanf(u8Buffer);
   for (int i = 0; i < USER1_INPUT_BUFFER_SIZE; i++)
     au8UserInputBuffer[i] = 0;
   /* If good initialization, set state to Idle */
@@ -161,25 +159,12 @@ static void UserApp1SM_Idle(void)
     turn_light = 0;
   }
  }
+ u8 u8NumCharactersinBuffer[] = "\n\rThis is how many characters are in the buffer:";
 
- static u8 u8NumCharsMessage[] = "\n\rCharacters in buffer: ";
- static u8 u8BufferMessage[] = "\n\rBuffer contents:\n\r";
- u8 u8CharCount;
- if (WasButtonPressed(BUTTON0)){
-  ButtonAcknowledge(BUTTON0);
-
-  DebugPrintf(u8NumCharsMessage);
-  DebugPrintNumber(G_u8DebugScanfCharCount);
-  DebugLineFeed();
- }
- if (WasButtonPressed(BUTTON1)){
-  ButtonAcknowledge(BUTTON1);
-
-  u8CharCount = DebugScanf(au8UserInputBuffer);
-  au8UserInputBuffer[u8CharCount] = '\0';
-  DebugPrintf(u8BufferMessage);
-  DebugPrintf(au8UserInputBuffer);
-  DebugLineFeed();
+ if (WasButtonPressed(BUTTON0)) {
+    DebugPrintf(u8NumCharactersinBuffer);
+    DebugPrintNumber(G_u8DebugScanfCharCount);
+    DebugLineFeed;
  }
  }
 /* end UserApp1SM_Idle() */
