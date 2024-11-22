@@ -94,6 +94,8 @@ Promises:
 */
 void UserApp1Initialize(void)
 {
+  u8 u8String = "ABC";
+  DebugPrintf(u8String);
   for (int i = 0; i < USER1_INPUT_BUFFER_SIZE; i++)
     au8UserInputBuffer[i] = 0;
   /* If good initialization, set state to Idle */
