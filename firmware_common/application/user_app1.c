@@ -159,14 +159,14 @@ static void UserApp1SM_Idle(void)
       turn_light = 0;
     }
   }
- u8 u8NumCharactersinBuffer[] = "\n\rThis is how many characters are in the buffer:";
+  u8 u8NumCharactersinBuffer[] = "\n\rThis is how many characters are in the buffer:";
 
- if (WasButtonPressed(BUTTON0)){
-
+  if (WasButtonPressed(BUTTON0)){
+    ButtonAcknowledge(BUTTON0);
     DebugPrintf(u8NumCharactersinBuffer);
     DebugPrintNumber(G_u8DebugScanfCharCount);
     DebugLineFeed();
- }
+  } 
  }
 /* end UserApp1SM_Idle() */
      
