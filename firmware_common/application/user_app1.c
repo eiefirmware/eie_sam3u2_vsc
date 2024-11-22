@@ -94,11 +94,7 @@ Promises:
 */
 void UserApp1Initialize(void)
 {
-  u8 u8String[] = "ABC";
-  u8 u8Buffer[] = "\n\rTEST";
-  DebugPrintf(u8String);
-  DebugPrintNumber(32);
-  DebugLineFeed();
+  static u8 u8Buffer[] = "";
   DebugScanf(u8Buffer);
   for (int i = 0; i < USER1_INPUT_BUFFER_SIZE; i++)
     au8UserInputBuffer[i] = 0;
