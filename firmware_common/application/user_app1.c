@@ -153,6 +153,7 @@ static void UserApp1SM_Idle(void)
 {
   static u16 u16_heartbeat_counter = U16_COUNTER_PERIOD_MS;
   static int turn_light = 0;
+  bool bBlinkingCursor = 0;
 
   u16_heartbeat_counter -= 1;
   if (u16_heartbeat_counter == 0) { 
@@ -168,10 +169,13 @@ static void UserApp1SM_Idle(void)
   }
   if (WasButtonPressed(BUTTON0)) {
     ButtonAcknowledge(BUTTON0);
-    LcdCommand(LCD_DISPLAY_CMD | LCD_DISPLAY_BLINK);
+    bBlinkingCursor = 1;
+    if (bBlinkingCursor)
+      LcdCommand(LCD_DISPLAY_CMD | LCD_DISPLAY_BLINK);
+    else {
+      bBlinkingCursor = 0;
+    }
   }
-  else
-    LcdCommand(LCD_DISPLAY_BLINK);
 }
 /* end UserApp1SM_Idle() */
      
