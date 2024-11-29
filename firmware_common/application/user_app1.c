@@ -174,9 +174,10 @@ static void UserApp1SM_Idle(void)
     LcdCommand(LCD_DISPLAY_CMD | LCD_DISPLAY_ON);
     boolBlinkingCursor = FALSE;
   }
+
   else {
     boolBlinkingCursor = TRUE;
-    LcdCommand(LCD_DISPLAY_CMD | LCD_DISPLAY_BLINK| LCD_DISPLAY_ON | LCD_DISPLAY_CURSOR);
+    LcdCommand(LCD_DISPLAY_CMD | LCD_DISPLAY_ON | LCD_DISPLAY_CURSOR | LCD_DISPLAY_BLINK);
   }
   }  
 }
