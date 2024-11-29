@@ -95,10 +95,9 @@ Promises:
 */
 void UserApp1Initialize(void)
 {
-  DebugSetPassthrough();
-  for (int i = 0; i < USER1_INPUT_BUFFER_SIZE; i++){
-    u8CharsinBuffer[i] = 0;
-  }
+  LcdClearChars(LINE1_START_ADDR + 13, 3);
+  LcdMessage(LINE1_START_ADDR, "Hello World");
+  LcdClearChars(LINE1_START_ADDR, 30);
   /* If good initialization, set state to Idle */
   if( 1 )
   {
@@ -162,32 +161,7 @@ static void UserApp1SM_Idle(void)
       turn_light = 0;
     }
   }
-  u8 u8NumCharactersinBuffer[] = "\n\rThis is how many characters are in the buffer: ";
-  char charName[] = "Daniel";
-  u8 u8NumNameTyped = 0;
-
-    if (WasButtonPressed(BUTTON0)){
-    ButtonAcknowledge(BUTTON0);
-    DebugPrintf(u8NumCharactersinBuffer);
-    DebugPrintNumber(G_u8DebugScanfCharCount);
-    DebugLineFeed();
-  } 
-  if (WasButtonPressed(BUTTON1)){
-    u8 u8NumChars;
-    ButtonAcknowledge(BUTTON1);
-    u8NumChars = DebugScanf(u8CharsinBuffer);
-    u8CharsinBuffer[u8NumChars] = '\0';
-    DebugPrintf(u8CharsinBuffer);
-    DebugLineFeed();
-  }
-  if (WasButtonPressed(BUTTON2)) {
-    ButtonAcknowledge(BUTTON2);
-    if (strstr(G_au8DebugScanfBuffer, charName)) {
-      u8NumNameTyped++;
-      DebugPrintNumber(u8NumNameTyped);
-    }
-  }
-  }
+}
 /* end UserApp1SM_Idle() */
      
 
