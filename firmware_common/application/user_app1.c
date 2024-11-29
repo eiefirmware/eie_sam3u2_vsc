@@ -44,8 +44,7 @@ Global variable definitions with scope across entire project.
 All Global variable names shall start with "G_<type>UserApp1"
 ***********************************************************************************************************************/
 /* New variables */
-volatile u32 G_u32UserApp1Flags;                          /*!< @brief Global state flags */
-
+volatile u32 G_u32UserApp1Flags;                          /*!< @brief Global state flags */static u8 UserApp1Name[] = "Button Location";
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* Existing variables (defined in other files -- should all contain the "extern" keyword) */
@@ -67,6 +66,28 @@ static fnCode_type UserApp1_pfStateMachine;               /*!< @brief The state 
 Function Definitions
 **********************************************************************************************************************/
 
+void light_button(void){
+  if(WasButtonPressed(BUTTON0)){
+    ButtonAcknowledge(BUTTON0);
+    LedToggle(BLUE);
+  }
+
+  if(WasButtonPressed(BUTTON1)){
+    ButtonAcknowledge(BUTTON1);
+    LedToggle(GREEN);
+  }
+
+  if(WasButtonPressed(BUTTON2)){
+    ButtonAcknowledge(BUTTON2);
+    LedToggle(RED);
+  }
+
+  if(WasButtonPressed(BUTTON3)){
+    ButtonAcknowledge(BUTTON3);
+    LedToggle(YELLOW);
+  }
+
+}
 /*--------------------------------------------------------------------------------------------------------------------*/
 /*! @publicsection */                                                                                            
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -98,11 +119,28 @@ void UserApp1Initialize(void)
     UserApp1_pfStateMachine = UserApp1SM_Idle;
     HEARTBEAT_OFF();
     LcdCommand(LCD_CLEAR_CMD);
-    LcdMessage(LINE1_START_ADDR, "BUTTON LOCATIONS");
+    LcdMessage(LINE1_START_ADDR,UserApp1Name);
     LcdMessage(LINE2_START_ADDR, "0");
     LcdMessage(LINE2_START_ADDR+6,"1");
     LcdMessage(LINE2_START_ADDR+13,"2");
     LcdMessage(LINE2_END_ADDR,"3");
+    LedOff(BLUE);
+    LedOff(GREEN);
+    LedOff(RED);
+    LedOff(YELLOW);
+    
+    u8 String1[] = "\n\rA string to print that starts and ends with a line feed and cursor return";
+    u8 String2[] = "Here's a number: ";
+    u8 String3[] = " <-- The 'cursor' was here.";
+    u32 Number = 1234567;
+
+    DebugPrintf(String1);
+    DebugPrintf(String2);
+    DebugPrintf(Number);
+    DebugPrintf(String3);
+    DebugLineFeed();
+    DebugPrintf(String3);
+    DebugLineFeed();
   }
   else
   {
@@ -131,7 +169,7 @@ Promises:
 void UserApp1RunActiveState(void)
 {
   UserApp1_pfStateMachine();
-
+  light_button();
 } /* end UserApp1RunActiveState */
 
 
