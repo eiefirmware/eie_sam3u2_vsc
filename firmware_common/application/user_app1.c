@@ -170,6 +170,8 @@ static void UserApp1SM_Idle(void)
     ButtonAcknowledge(BUTTON0);
     LcdCommand(LCD_DISPLAY_CMD | LCD_DISPLAY_BLINK);
   }
+  else
+    LcdCommand(LCD_DISPLAY_BLINK);
 }
 /* end UserApp1SM_Idle() */
      
