@@ -96,7 +96,6 @@ void UserApp1Initialize(void)
 {
   //LcdClearChars(LINE1_START_ADDR + 13, 3);
   //LcdMessage(LINE1_START_ADDR, "Hello World");
-  bool boolBlinkingCursor = FALSE;
   LcdCommand(LCD_CLEAR_CMD);
   static u8 UserApp_au8MyName [] = "Daniel";
   LcdMessage(LINE1_START_ADDR, UserApp_au8MyName);
@@ -154,6 +153,8 @@ static void UserApp1SM_Idle(void)
 {
   static u16 u16_heartbeat_counter = U16_COUNTER_PERIOD_MS;
   static int turn_light = 0;
+  static bool boolBlinkingCursor = FALSE;
+
 
   u16_heartbeat_counter -= 1;
   if (u16_heartbeat_counter == 0) { 
