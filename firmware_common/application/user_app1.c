@@ -101,7 +101,7 @@ void UserApp1Initialize(void)
   static u8 UserApp_au8MyName [] = "Daniel";
   LcdMessage(LINE1_START_ADDR, UserApp_au8MyName);
   LcdMessage(LINE2_START_ADDR, "0");
-  LcdMessage(LINE2_START_ADDR + 6, "1");
+  LcdMessage(LINE2_START_ADDR + 7, "1");
   LcdMessage(LINE2_START_ADDR + 13, "2");
   LcdMessage(LINE2_END_ADDR, "3");
   /* If good initialization, set state to Idle */
