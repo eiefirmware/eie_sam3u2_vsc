@@ -171,12 +171,12 @@ static void UserApp1SM_Idle(void)
   ButtonAcknowledge(BUTTON0);
   
   if (boolBlinkingCursor) {
-    LcdCommand(LCD_DISPLAY_CMD | LCD_DISPLAY_BLINK);
+    LcdCommand(LCD_DISPLAY_CMD | LCD_DISPLAY_ON);
     boolBlinkingCursor = FALSE;
   }
   else {
     boolBlinkingCursor = TRUE;
-    LcdCommand(LCD_DISPLAY_CMD | LCD_DISPLAY_ON);
+    LcdCommand(LCD_DISPLAY_CMD | LCD_DISPLAY_BLINK| LCD_DISPLAY_ON | LCD_DISPLAY_CURSOR);
   }
   }  
 }
