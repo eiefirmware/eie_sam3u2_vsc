@@ -97,7 +97,7 @@ void UserApp1Initialize(void)
 {
   //LcdClearChars(LINE1_START_ADDR + 13, 3);
   //LcdMessage(LINE1_START_ADDR, "Hello World");
-  LcdCommand(LCD_DISPLAY_CMD | LCD_CLEAR_CMD);
+  LcdCommand(LCD_CLEAR_CMD);
   static u8 UserApp_au8MyName [] = "Daniel";
   LcdMessage(LINE1_START_ADDR, UserApp_au8MyName);
   LcdMessage(LINE2_START_ADDR, "0");
