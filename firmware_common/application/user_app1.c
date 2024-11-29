@@ -62,7 +62,6 @@ Variable names shall start with "UserApp1_<type>" and be declared as static.
 ***********************************************************************************************************************/
 static fnCode_type UserApp1_pfStateMachine;               /*!< @brief The state machine function pointer */
 #define U16_COUNTER_PERIOD_MS (u16)500;
-static u8 u8CharsinBuffer[USER1_INPUT_BUFFER_SIZE];
 //static u32 UserApp1_u32Timeout;                           /*!< @brief Timeout counter used across states */
 
 
@@ -166,6 +165,10 @@ static void UserApp1SM_Idle(void)
       HEARTBEAT_ON();
       turn_light = 0;
     }
+  }
+  if (WasButtonPressed(BUTTON0)) {
+    ButtonAcknowledge(BUTTON0);
+    LcdCommand(LCD_DISPLAY_CMD | LCD_DISPLAY_BLINK);
   }
 }
 /* end UserApp1SM_Idle() */
