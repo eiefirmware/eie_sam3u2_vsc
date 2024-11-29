@@ -103,6 +103,7 @@ void UserApp1Initialize(void)
   LcdMessage(LINE2_START_ADDR + 6, "1");
   LcdMessage(LINE2_START_ADDR + 13, "2");
   LcdMessage(LINE2_END_ADDR, "3");
+  LcdCommand(LCD_HOME_CMD);
   /* If good initialization, set state to Idle */
   if( 1 )
   {
