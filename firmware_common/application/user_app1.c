@@ -170,12 +170,16 @@ static void UserApp1SM_Idle(void)
   if (WasButtonPressed(BUTTON0)) {
     ButtonAcknowledge(BUTTON0);
     bBlinkingCursor = 1;
-    if (bBlinkingCursor)
-      LcdCommand(LCD_DISPLAY_CMD | LCD_DISPLAY_BLINK);
-    else {
-      bBlinkingCursor = 0;
-    }
   }
+
+  if (bBlinkingCursor)
+    LcdCommand(LCD_DISPLAY_CMD | LCD_DISPLAY_BLINK);
+
+  else {
+    bBlinkingCursor = 0;
+    LcdCommand(LCD_DISPLAY_BLINK);
+  }
+  
 }
 /* end UserApp1SM_Idle() */
      
