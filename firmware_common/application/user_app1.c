@@ -45,6 +45,7 @@ All Global variable names shall start with "G_<type>UserApp1"
 ***********************************************************************************************************************/
 /* New variables */
 volatile u32 G_u32UserApp1Flags;                          /*!< @brief Global state flags */static u8 UserApp1Name[] = "Button Location";
+u8 SOS[] = {1,1,1,1,0,0,0,0,1,1,1,1};
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* Existing variables (defined in other files -- should all contain the "extern" keyword) */
@@ -79,12 +80,12 @@ void light_button(void){
 
   if(WasButtonPressed(BUTTON2)){
     ButtonAcknowledge(BUTTON2);
-    LedToggle(RED);
+    LedToggle(YELLOW);
   }
 
   if(WasButtonPressed(BUTTON3)){
     ButtonAcknowledge(BUTTON3);
-    LedToggle(YELLOW);
+    LedToggle(RED);
   }
 
 }
@@ -128,19 +129,6 @@ void UserApp1Initialize(void)
     LedOff(GREEN);
     LedOff(RED);
     LedOff(YELLOW);
-    
-    u8 String1[] = "\n\rA string to print that starts and ends with a line feed and cursor return";
-    u8 String2[] = "Here's a number: ";
-    u8 String3[] = " <-- The 'cursor' was here.";
-    u32 Number = 1234567;
-
-    DebugPrintf(String1);
-    DebugPrintf(String2);
-    DebugPrintf(Number);
-    DebugPrintf(String3);
-    DebugLineFeed();
-    DebugPrintf(String3);
-    DebugLineFeed();
   }
   else
   {
@@ -169,7 +157,6 @@ Promises:
 void UserApp1RunActiveState(void)
 {
   UserApp1_pfStateMachine();
-  light_button();
 } /* end UserApp1RunActiveState */
 
 
@@ -185,7 +172,21 @@ State Machine Function Definitions
 /* What does this state do? */
 static void UserApp1SM_Idle(void)
 {
-
+  static u16 counter = U16_COUNTER_PERIOD_MS;
+  static int letter = 0;
+  if(counter==0){
+    if(SOS[letter]==1)
+      LedOn(RED);
+    
+    else if(SOS[letter]==0)
+      LedBlink(RED, LED_1HZ);
+    
+    letter++;
+    if(letter==12)
+      letter=0;
+    counter = U16_COUNTER_PERIOD_MS;
+  }
+  counter--;
 } 
  /* end UserApp1SM_Idle() */
 

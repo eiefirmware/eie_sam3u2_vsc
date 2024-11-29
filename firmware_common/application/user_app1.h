@@ -56,7 +56,7 @@ static void UserApp1SM_Error(void);
 Constants / Definitions
 **********************************************************************************************************************/
 
-#define U16_COUNTER_PERIOD_MS (u16)500;
+#define U16_COUNTER_PERIOD_MS (u16)4000;
 
 #endif /* __USER_APP1_H */
 
