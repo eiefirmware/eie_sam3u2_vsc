@@ -95,9 +95,15 @@ Promises:
 */
 void UserApp1Initialize(void)
 {
-  LcdClearChars(LINE1_START_ADDR + 13, 3);
-  LcdMessage(LINE1_START_ADDR, "Hello World");
-  LcdClearChars(LINE1_START_ADDR, 30);
+  //LcdClearChars(LINE1_START_ADDR + 13, 3);
+  //LcdMessage(LINE1_START_ADDR, "Hello World");
+  LcdCommand(LCD_DISPLAY_CMD | LCD_CLEAR_CMD);
+  static u8 UserApp_au8MyName [] = "Daniel";
+  LcdMessage(LINE1_START_ADDR, UserApp_au8MyName);
+  LcdMessage(LINE2_START_ADDR, "0");
+  LcdMessage(LINE2_START_ADDR + 6, "1");
+  LcdMessage(LINE2_START_ADDR + 13, "2");
+  LcdMessage(LINE2_END_ADDR, "3");
   /* If good initialization, set state to Idle */
   if( 1 )
   {
