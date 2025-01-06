@@ -171,6 +171,7 @@ static void UserApp1SM_Idle(void)
      static u16 u16BlinkCount = 0;
      static u8 u8Counter = 0;
      static u8 u8ColorIndex = 0;
+     static u16 stopCount = 0;
      // Colors: Red, Yellow, Green, Cyan, Blue, Purple, White
      // Consistent Color Blinking for multiple patterns
      static u8 aau8Color[7][3] = {{RED0, 0xff, 0xff}, 
@@ -180,12 +181,44 @@ static void UserApp1SM_Idle(void)
                                  {0xff, 0xff, BLUE0},
                                  {RED0, 0xff, BLUE0},
                                  {RED0, GREEN0, BLUE0},};
+     u16BlinkCount++;
+     if (u16BlinkCount > 240)
+        stopCount++;
+     if (u16BlinkCount % 250 == 0)
+     {
+        for(u8 j = 0; j < 3; j++)
+        {
+          if(aau8Color[u8ColorIndex][j] != 0xff)
+          {
+            LedOn((aau8Color[u8ColorIndex][j]) + u8Counter);
+          }
+        }
+     }
+     else if (stopCount % 250 == 0)
+     {
+        for(u8 i = 0; i < (U8_TOTAL_LEDS - 1); i++)
+        {
+          LedOff((LedNameType)i);
+        } 
+        u8Counter++;
+        if(u8Counter == 4)
+        {
+          u8Counter = 0;
+        }
+        if (u8ColorIndex > 7)
+        {
+          u8ColorIndex = 0;
+        }
+     } 
+     if (u16BlinkCount % 1000 == 0)
+     u8ColorIndex++; 
+    /*
      u8 u8Offset = 0;
      // Using knowledge of LedNameType to use a loop for initializing all LEDs to off state
      for(u8 i = 0; i < (U8_TOTAL_LEDS - 1); i++)
      {
       LedOff((LedNameType)i);
-     }
+     } 
      // Set color for each bit (LED) in the 4-bit counter
     if(u8Counter & 0x01)
     {
@@ -247,6 +280,7 @@ static void UserApp1SM_Idle(void)
           }
         }
      }
+     */
      /*
      // Pattern for multicolor blinking
      LedOff(RED3);
