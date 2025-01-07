@@ -120,6 +120,7 @@ void UserApp1Initialize(void)
   LedOff(BLUE3);
 
   LedOff(LCD_BL);
+  LedOn(LCD_BL);
   /* If good initialization, set state to Idle */
   if( 1 )
   {
@@ -169,9 +170,20 @@ State Machine Function Definitions
 static void UserApp1SM_Idle(void)
 {
      static u16 u16BlinkCount = 0;
-     static u8 u8Counter = 0;
+     static u8 u8Counter = 26;
+     /*
      static u8 u8ColorIndex = 0;
      static u16 stopCount = 0;
+     */
+     u16BlinkCount++;
+     if (u16BlinkCount % 40)
+     {
+        LedPWM(LCD_BL, (LedRateType)u8Counter);
+        u8Counter--;
+        if (u8Counter == 6)
+          u8Counter = 26;
+     }
+     /*
      // Colors: Red, Yellow, Green, Cyan, Blue, Purple, White
      // Consistent Color Blinking for multiple patterns
      static u8 aau8Color[7][3] = {{RED0, 0xff, 0xff}, 
@@ -212,6 +224,7 @@ static void UserApp1SM_Idle(void)
      } 
      if (u16BlinkCount % 1000 == 0)
      u8ColorIndex++; 
+    */
     /*
      u8 u8Offset = 0;
      // Using knowledge of LedNameType to use a loop for initializing all LEDs to off state
