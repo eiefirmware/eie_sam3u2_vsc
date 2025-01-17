@@ -65,6 +65,7 @@ Includes
 #ifdef EIE_ASCII
 #include "eief1-pcb-01.h"
 #include "lcd_nhd-c0220biz.h"
+#include "ascii_board_test.h"
 #endif /* EIE_ASCII */
 
 #ifdef EIE_DOTMATRIX

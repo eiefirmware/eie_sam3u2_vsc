@@ -239,6 +239,7 @@ def build(ctx):
     ascii_folders = [
         "firmware_ascii/bsp",
         "firmware_ascii/drivers",
+        "firmware_ascii/application",        
     ]
     dot_matrix_folders = [
         "firmware_dotmatrix/bsp/",
