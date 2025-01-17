@@ -237,6 +237,7 @@ def build(ctx):
 
     # Files specific to the ascii and dot matrix boards.
     ascii_folders = [
+        "firmware_ascii/application"
         "firmware_ascii/bsp",
         "firmware_ascii/drivers",
     ]
