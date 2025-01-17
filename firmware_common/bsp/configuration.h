@@ -26,6 +26,7 @@ Runtime switches
 
 //#define EIE_DOTMATRIX_R01           /*!< Use with MPGL2-EHDW-01 revision board */
 
+//#define CAP_TOUCH
 
 /**********************************************************************************************************************
 Type Definitions
@@ -78,6 +79,7 @@ Includes
 #include "captouch.h"
 #include "lcd_NHD-C12864LZ.h"
 #include "lcd_bitmaps.h"
+#include "dotmatrix_board_test.h"
 #endif /* EIE_DOTMATRIX */
 
 /* Common driver header files */
