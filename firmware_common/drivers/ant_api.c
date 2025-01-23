@@ -16,11 +16,8 @@ Copy the following definitions to your client task:
 // Globals for passing data from the ANT application to the API
 
 extern u32 G_u32AntApiCurrentMessageTimeStamp;                            // From ant_api.c
-
 extern AntApplicationMessageType G_eAntApiCurrentMessageClass;            // From ant_api.c
-
 extern u8 G_au8AntApiCurrentMessageBytes[ANT_APPLICATION_MESSAGE_BYTES];  // From ant_api.c
-
 extern AntExtendedDataType G_sAntApiCurrentMessageExtData;                // From ant_api.c
 
 
