@@ -53,9 +53,9 @@ Constants / Definitions
 
 /* BoardTest ANT radio settings */
 /* MAKE SURE TO CHANGE THE u8 and u32 values for DEVICEID */
-#define	U8_ANT_DEVICEID_LO_BOARDTEST			        (u8)0x34
-#define U8_ANT_DEVICEID_HI_BOARDTEST		          (u8)0x12
-#define U32_ANT_DEVICEID_DEC_BOARDTEST	          (u32)4660
+#define	U8_ANT_DEVICEID_LO_BOARDTEST			        (u8)0x7C
+#define U8_ANT_DEVICEID_HI_BOARDTEST		          (u8)0x10
+#define U32_ANT_DEVICEID_DEC_BOARDTEST	          (u32)4220
 
 /* IF YOU CHANGE DEVICE TYPE OR TRANSMISSION TYPE, YOU MUST CHANGE 
 THE STARTUP TEXT MESSAGE IN BoardTestSM_SetupAnt */
