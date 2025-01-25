@@ -81,7 +81,7 @@ int main(void)
   AntApiInitialize();
   
 #ifdef EIE_ASCII
-  BoardTestInitialize();
+  // BoardTestInitialize();
 #endif /* EIE_ASCII */
 
 #if defined(EIE_DOTMATRIX) && !defined(EIE_NO_CAPTOUCH)
@@ -122,7 +122,7 @@ int main(void)
     AntApiRunActiveState();
 
 #ifdef EIE_ASCII
-  BoardTestRunActiveState();
+  // BoardTestRunActiveState();
 #endif /* EIE_ASCII */
 
 #if defined(EIE_DOTMATRIX) && !defined(EIE_NO_CAPTOUCH)
