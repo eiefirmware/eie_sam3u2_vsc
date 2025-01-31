@@ -265,9 +265,6 @@ def build(ctx):
         defines += ["EIE_DOTMATRIX"]
         target = "firmware-dot-matrix"
         uses += ["sam3u-32qt-k-8rs-gnu"]
-        # Because the captouch uses a lot of CPU it's worth enabling some
-        # optimizations to avoid sensor read timeouts.
-        optlevel = "1"
     else:
         ctx.fatal("No board type specified.")
 
