@@ -1757,7 +1757,12 @@ Promises:
 - SRDY pulsed and ends deasserted
 
 */
-static void AntSrdyPulse(void)
+// James B: I de-optimized this as a quick fix. Under optimizations the busy loops reduce to
+// 2 instructions instead of ~7, so it becomes too quick for the nRF to capture the pulse.
+// A proper fix might use a micro-delay function based on reading the systick register, as at the
+// current speed (6000 ticks per ms) you would get sub-microsecond resolution which is more than
+// enough for this delay.
+static void __attribute__((optimize("O0"))) AntSrdyPulse(void)
 {
   for(u32 i = 0; i < ANT_SRDY_DELAY; i++);
   SYNC_SRDY_ASSERT();
