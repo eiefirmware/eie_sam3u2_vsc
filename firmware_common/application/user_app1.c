@@ -54,6 +54,10 @@ extern volatile u32 G_u32SystemTime1s;                    /*!< @brief From main.
 extern volatile u32 G_u32SystemFlags;                     /*!< @brief From main.c */
 extern volatile u32 G_u32ApplicationFlags;                /*!< @brief From main.c */
 
+extern u32 G_u32AntApiCurrentMessageTimeStamp;                            // From ant_api.c
+extern AntApplicationMessageType G_eAntApiCurrentMessageClass;            // From ant_api.c
+extern u8 G_au8AntApiCurrentMessageBytes[ANT_APPLICATION_MESSAGE_BYTES];  // From ant_api.c
+extern AntExtendedDataType G_sAntApiCurrentMessageExtData;                // From ant_api.c
 
 /***********************************************************************************************************************
 Global variable definitions with scope limited to this local application.
@@ -92,10 +96,34 @@ Promises:
 */
 void UserApp1Initialize(void)
 {
+  AntAssignChannelInfoType sChannelInfo;
+
+  if (AntRadioStatusChannel(U8_ANT_CHANNEL_USERAPP) == ANT_UNCONFIGURED) {
+    sChannelInfo.AntChannel = U8_ANT_CHANNEL_PERIOD_HI_USERAPP;
+    sChannelInfo.AntChannelType = CHANNEL_TYPE_MASTER;
+    sChannelInfo.AntChannelPeriodHi = U8_ANT_CHANNEL_PERIOD_HI_USERAPP;
+    sChannelInfo.AntChannelPeriodLo = U8_ANT_CHANNEL_PERIOD_LO_USERAPP;
+    
+    sChannelInfo.AntDeviceIdHi = U8_ANT_DEVICE_HI_USERAPP;
+    sChannelInfo.AntDeviceIdLo = U8_ANT_DEVICE_LO_USERAPP;
+    sChannelInfo.AntDeviceType = U8_ANT_DEVICE_TYPE_USERAPP;
+    sChannelInfo.AntTransmissionType = U8_ANT_TRANSMISSION_TYPE_USERAPP;
+    
+    sChannelInfo.AntFrequency = U8_ANT_FREQUENCY_USERAPP;
+    sChannelInfo.AntTxPower = U8_ANT_TX_POWER_USERAPP;
+    
+    sChannelInfo.AntNetwork = ANT_NETWORK_DEFAULT;
+    for(u8 i = 0; i < ANT_NETWORK_NUMBER_BYTES; i++) {
+      sChannelInfo.AntNetworkKey[i] = ANT_DEFAULT_NETWORK_KEY;
+    }
+    
+    AntAssignChannel(&sChannelInfo);
+  }
+
   /* If good initialization, set state to Idle */
-  if( 1 )
+  if(1)
   {
-    UserApp1_pfStateMachine = UserApp1SM_Idle;
+    UserApp1_pfStateMachine = UserApp1SM_WaitAntReady;
   }
   else
   {
@@ -137,11 +165,22 @@ void UserApp1RunActiveState(void)
 State Machine Function Definitions
 **********************************************************************************************************************/
 /*-------------------------------------------------------------------------------------------------------------------*/
+
+// handles idle
+static void UserApp1SM_Idle(void) {
+  
+}
+
 /* What does this state do? */
-static void UserApp1SM_Idle(void)
+static void UserApp1SM_WaitAntReady(void)
 {
-     
-} /* end UserApp1SM_Idle() */
+  if (AntRadioStatusChannel(U8_ANT_CHANNEL_USERAPP) == ANT_CONFIGURED) {
+    if (AntOpenChannelNumber(U8_ANT_CHANNEL_USERAPP))
+      UserApp1_pfStateMachine = UserApp1SM_WaitChannelOpen;
+    else
+      UserApp1_pfStateMachine = UserApp1SM_Error;
+  } /* end if (AntOpenChannelNumber)*/
+} /* end UserApp1SM_WaitAntReady() */
      
 
 /*-------------------------------------------------------------------------------------------------------------------*/
@@ -151,6 +190,16 @@ static void UserApp1SM_Error(void)
   
 } /* end UserApp1SM_Error() */
 
+// Hold here until ANT confirms the channel is open
+static void UserApp1SM_WaitChannelOpen(void) {
+  if (AntRadioStatusChannel(U8_ANT_CHANNEL_USERAPP) == ANT_OPEN)
+    UserApp1_pfStateMachine = UserApp1SM_ChannelOpen;
+}
+
+// Processes messages while channel is open
+static void UserApp1SM_ChannelOpen(void) {
+
+}
 
 
 
